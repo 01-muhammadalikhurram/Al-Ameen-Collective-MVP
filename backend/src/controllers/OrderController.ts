@@ -12,18 +12,24 @@ export class OrderController {
 
   createOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const { customer_name, customer_phone, customer_address, notes, items } = req.body;
+      const body = req.body as {
+        customer_name: string;
+        customer_phone: string;
+        customer_address: string;
+        notes?: string;
+        items: { item_id: string; quantity: number }[];
+      };
       
-      if (!customer_name || !customer_phone || !customer_address || !items) {
+      if (!body.customer_name || !body.customer_phone || !body.customer_address || !body.items) {
         throw new ApiError(400, 'Missing required fields for checkout');
       }
 
       const order = await this.orderService.createOrder({
-        customer_name,
-        customer_phone,
-        customer_address,
-        notes,
-        items
+        customer_name: body.customer_name,
+        customer_phone: body.customer_phone,
+        customer_address: body.customer_address,
+        notes: body.notes,
+        items: body.items
       });
 
       res.status(201).json(ApiResponse.success('Order placed successfully', order));

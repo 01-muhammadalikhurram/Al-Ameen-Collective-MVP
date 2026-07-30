@@ -3,6 +3,7 @@ import { API_VERSION } from '../constants';
 import healthRoutes from './health.routes';
 
 import { authRouter } from './auth.routes';
+import { adminRoutes } from './admin.routes';
 import { configRouter } from './config.routes';
 import { productRoutes } from './product.routes';
 import { orderRoutes } from './order.routes';
@@ -16,11 +17,11 @@ const router = Router();
 
 // System routes
 router.use(healthRoutes);
-router.use('/admin', authRouter);
+router.use('/auth', authRouter);
+router.use('/admin', adminRoutes);
 router.use('/config', configRouter);
 router.use('/products', productRoutes);
 router.use('/orders', orderRoutes);
-// router.use('/admin', adminRoutes);
 // router.use('/vendor', vendorRoutes);
 // router.use('/pricing', pricingRoutes);
 // router.use('/delivery', deliveryRoutes);

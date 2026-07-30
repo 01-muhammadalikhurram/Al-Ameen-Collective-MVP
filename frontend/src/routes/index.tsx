@@ -6,6 +6,10 @@ import { ProductDetailsPage } from '../pages/ProductDetailsPage';
 import { CartPage } from '../pages/CartPage';
 import { CheckoutPage } from '../pages/CheckoutPage';
 import { OrderSuccessPage } from '../pages/OrderSuccessPage';
+import { AdminLayout } from '../layouts/AdminLayout';
+import { AdminLoginPage } from '../pages/admin/AdminLoginPage';
+import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
+import { ProtectedRoute } from '../components/ProtectedRoute';
 
 /**
  * Global route definitions.
@@ -43,14 +47,6 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: '/admin',
-    element: (
-      <div className="flex min-h-screen items-center justify-center bg-sidebar">
-        <h1 className="text-2xl font-bold">Admin Portal Placeholder</h1>
-      </div>
-    ),
-  },
-  {
     path: '/vendor',
     element: (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -58,4 +54,37 @@ export const router = createBrowserRouter([
       </div>
     ),
   },
+  {
+    path: '/admin/login',
+    element: <AdminLoginPage />,
+  },
+  {
+    path: '/admin',
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: '',
+        element: <AdminLayout />,
+        children: [
+          {
+            path: 'dashboard',
+            element: <AdminDashboardPage />,
+          },
+          // Future Sprint 10 & 11 pages will go here
+          {
+            path: 'orders',
+            element: <div className="p-8">Orders Placeholder</div>,
+          },
+          {
+            path: 'products',
+            element: <div className="p-8">Products Placeholder</div>,
+          },
+          {
+            path: 'settings',
+            element: <div className="p-8">Settings Placeholder</div>,
+          }
+        ]
+      }
+    ]
+  }
 ]);

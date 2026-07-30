@@ -1,19 +1,21 @@
-import { Router } from 'express';
+import { Router, RequestHandler } from 'express';
 import { AuthController } from '../controllers/AuthController';
 import { validate } from '../middleware/validate';
 import { loginSchema } from '../validators/auth.validator';
+
+import { authMiddleware } from '../middleware/auth';
 
 const router = Router();
 const authController = new AuthController();
 
 /**
  * @openapi
- * /admin/login:
+ * /auth/login:
  *   post:
  *     summary: Admin Login
  *     description: Authenticates the admin and returns a JWT token.
  *     tags:
- *       - Admin
+ *       - Auth
  *     requestBody:
  *       required: true
  *       content:
@@ -37,5 +39,18 @@ const authController = new AuthController();
  *         description: Validation error
  */
 router.post('/login', validate(loginSchema), authController.login);
+
+/**
+ * @openapi
+ * /auth/me:
+ *   get:
+ *     summary: Get Current User
+ *     description: Returns the logged in user based on JWT.
+ *     tags:
+ *       - Auth
+ *     security:
+ *       - bearerAuth: []
+ */
+router.get('/me', authMiddleware as unknown as RequestHandler, authController.getMe as unknown as RequestHandler);
 
 export { router as authRouter };

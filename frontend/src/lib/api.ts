@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useAuthStore } from '../store/authStore';
 
 // Ensure the API url is pulled from environment or defaults to the vite proxy
 export const API_URL = import.meta.env.VITE_API_URL || '/api/v1';
@@ -12,7 +13,7 @@ export const apiClient = axios.create({
 
 // Interceptor for attaching auth tokens (we'll use this later for Admin routes)
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('admin-token');
+  const token = useAuthStore.getState().token;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

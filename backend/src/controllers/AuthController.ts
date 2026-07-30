@@ -18,4 +18,13 @@ export class AuthController {
       next(error);
     }
   };
+
+  getMe = (req: Request, res: Response, next: NextFunction): void => {
+    try {
+      const authReq = req as unknown as { user: any };
+      res.status(200).json(ApiResponse.success('User retrieved successfully', authReq.user));
+    } catch (error) {
+      next(error);
+    }
+  };
 }

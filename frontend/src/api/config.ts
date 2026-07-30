@@ -11,8 +11,15 @@ export interface WebsiteSetting {
   show_announcement_bar?: boolean | string;
 }
 
+export interface DeliveryRule {
+  id: string;
+  minimum_order: string; // Decimal
+  delivery_charge: string; // Decimal
+}
+
 export interface ConfigResponse {
   settings: WebsiteSetting;
+  deliveryRules: DeliveryRule[];
 }
 
 export const fetchConfig = async (): Promise<ConfigResponse> => {

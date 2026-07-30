@@ -1,0 +1,153 @@
+import { useParams, Link } from 'react-router-dom';
+import { useProduct } from '../api/products';
+import { useState, useEffect } from 'react';
+import { ShoppingCart, Check, ChevronRight } from 'lucide-react';
+import { cn } from '../lib/utils';
+
+export function ProductDetailsPage() {
+  const { slug } = useParams<{ slug: string }>();
+  const { data: product, isLoading, error } = useProduct(slug || '');
+  
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+
+  // Set default item when product loads
+  useEffect(() => {
+    if (product && product.items.length > 0 && !selectedItemId) {
+      setSelectedItemId(product.items[0].id);
+    }
+  }, [product, selectedItemId]);
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-12 flex justify-center">
+        <div className="animate-pulse flex flex-col items-center">
+          <div className="h-12 w-12 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p className="text-muted-foreground">Loading product details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <div className="container mx-auto px-4 py-24 text-center">
+        <h2 className="text-2xl font-bold mb-4">Product Not Found</h2>
+        <p className="text-muted-foreground mb-8">The product you are looking for does not exist or has been removed.</p>
+        <Link to="/products" className="px-6 py-2 bg-primary text-primary-foreground rounded-md">
+          Return to Shop
+        </Link>
+      </div>
+    );
+  }
+
+  const selectedItem = product.items.find(i => i.id === selectedItemId) || product.items[0];
+  const imageUrl = selectedItem?.media?.url || 'https://via.placeholder.com/800x1000?text=No+Image';
+
+  return (
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Breadcrumbs */}
+      <nav className="flex text-sm text-muted-foreground mb-8">
+        <ol className="flex items-center space-x-2">
+          <li><Link to="/" className="hover:text-foreground transition-colors">Home</Link></li>
+          <li><ChevronRight className="h-4 w-4" /></li>
+          <li><Link to="/products" className="hover:text-foreground transition-colors">Products</Link></li>
+          <li><ChevronRight className="h-4 w-4" /></li>
+          <li className="text-foreground font-medium truncate">{product.name}</li>
+        </ol>
+      </nav>
+
+      <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
+        
+        {/* Image Gallery (Simplified for MVP) */}
+        <div className="lg:w-1/2 flex-shrink-0">
+          <div className="aspect-[3/4] bg-muted rounded-2xl overflow-hidden border border-border">
+            <img 
+              src={imageUrl} 
+              alt={product.name} 
+              className="w-full h-full object-cover transition-opacity duration-300"
+              key={imageUrl} // Forces re-render/animation on image change
+            />
+          </div>
+          {/* Thumbnails could go here in a future iteration */}
+        </div>
+
+        {/* Product Info */}
+        <div className="lg:w-1/2 flex flex-col pt-4">
+          <div className="mb-2 text-sm font-semibold tracking-widest text-primary uppercase">
+            {product.category}
+          </div>
+          <h1 className="text-4xl sm:text-5xl font-heading font-bold mb-4 leading-tight">
+            {product.name}
+          </h1>
+          
+          <div className="text-2xl font-medium mb-8 flex items-baseline gap-2">
+            Rs {selectedItem?.selling_price || '0.00'}
+            <span className="text-sm text-muted-foreground font-normal">tax included</span>
+          </div>
+
+          {/* Color Selection */}
+          {product.items.length > 1 && (
+            <div className="mb-8">
+              <h3 className="text-sm font-medium mb-3">Color: <span className="text-muted-foreground">{selectedItem?.color}</span></h3>
+              <div className="flex flex-wrap gap-3">
+                {product.items.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => setSelectedItemId(item.id)}
+                    className={cn(
+                      "w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all",
+                      selectedItemId === item.id ? "border-primary scale-110" : "border-border hover:border-muted-foreground"
+                    )}
+                    style={{ backgroundColor: item.color.toLowerCase() }}
+                    title={item.color}
+                  >
+                    {selectedItemId === item.id && (
+                      <Check className={cn("h-4 w-4", item.color.toLowerCase() === 'white' ? 'text-black' : 'text-white')} />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-12">
+            <button className="flex-1 flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-md font-semibold hover:bg-primary/90 transition-colors">
+              <ShoppingCart className="h-5 w-5" />
+              Add to Cart
+            </button>
+            <button className="flex-1 flex items-center justify-center gap-2 bg-secondary text-secondary-foreground px-8 py-4 rounded-md font-semibold hover:bg-secondary/80 transition-colors">
+              Buy it Now
+            </button>
+          </div>
+
+          {/* Description & Details */}
+          <div className="space-y-6 border-t border-border pt-8">
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Description</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                {product.description || 'No description available for this premium piece.'}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="glass p-4 rounded-lg border border-border">
+                <span className="text-sm text-muted-foreground block mb-1">Fabric</span>
+                <span className="font-medium">{product.fabric}</span>
+              </div>
+              <div className="glass p-4 rounded-lg border border-border">
+                <span className="text-sm text-muted-foreground block mb-1">Season</span>
+                <span className="font-medium">{product.season}</span>
+              </div>
+              <div className="glass p-4 rounded-lg border border-border col-span-2">
+                <span className="text-sm text-muted-foreground block mb-1">Product Code</span>
+                <span className="font-medium font-mono">{selectedItem?.product_code}</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+}

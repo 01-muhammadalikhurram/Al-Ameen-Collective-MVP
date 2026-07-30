@@ -3,12 +3,14 @@ import { useProduct } from '../api/products';
 import { useState, useEffect } from 'react';
 import { ShoppingCart, Check, ChevronRight } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { useCartStore } from '../store/cartStore';
 
 export function ProductDetailsPage() {
   const { slug } = useParams<{ slug: string }>();
   const { data: product, isLoading, error } = useProduct(slug || '');
   
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const addItem = useCartStore((state) => state.addItem);
 
   // Set default item when product loads
   useEffect(() => {
@@ -42,6 +44,21 @@ export function ProductDetailsPage() {
 
   const selectedItem = product.items.find(i => i.id === selectedItemId) || product.items[0];
   const imageUrl = selectedItem?.media?.url || 'https://via.placeholder.com/800x1000?text=No+Image';
+
+  const handleAddToCart = () => {
+    if (!selectedItem) return;
+    
+    addItem({
+      id: selectedItem.id,
+      product_id: product.id,
+      name: product.name,
+      slug: product.slug,
+      color: selectedItem.color,
+      product_code: selectedItem.product_code,
+      selling_price: selectedItem.selling_price,
+      image_url: imageUrl
+    });
+  };
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -112,7 +129,10 @@ export function ProductDetailsPage() {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
-            <button className="flex-1 flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-md font-semibold hover:bg-primary/90 transition-colors">
+            <button 
+              onClick={handleAddToCart}
+              className="flex-1 flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-md font-semibold hover:bg-primary/90 transition-colors"
+            >
               <ShoppingCart className="h-5 w-5" />
               Add to Cart
             </button>

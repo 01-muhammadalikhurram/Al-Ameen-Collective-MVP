@@ -3,6 +3,7 @@ import { PublicLayout } from '../layouts/PublicLayout';
 import { HomePage } from '../pages/HomePage';
 import { CatalogPage } from '../pages/CatalogPage';
 import { ProductDetailsPage } from '../pages/ProductDetailsPage';
+import { CartPage } from '../pages/CartPage';
 
 /**
  * Global route definitions.
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
       {
         path: 'products/:slug',
         element: <ProductDetailsPage />,
+      },
+      {
+        path: 'cart',
+        element: <CartPage />,
       }
     ],
   },

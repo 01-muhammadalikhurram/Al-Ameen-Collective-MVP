@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import type { Product } from '../api/products';
 import { ShoppingCart } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { useCartStore } from '../store/cartStore';
 
 interface ProductCardProps {
   product: Product;
@@ -9,10 +10,28 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, className }: ProductCardProps) {
+  const addItem = useCartStore((state) => state.addItem);
+
   // Try to find the first active item with media, otherwise just take the first item
   const displayItem = product.items.find((item) => item.media) || product.items[0];
   const price = displayItem ? displayItem.selling_price : '0.00';
   const imageUrl = displayItem?.media?.url || 'https://via.placeholder.com/400x600?text=No+Image';
+
+  const handleQuickAdd = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!displayItem) return;
+    
+    addItem({
+      id: displayItem.id,
+      product_id: product.id,
+      name: product.name,
+      slug: product.slug,
+      color: displayItem.color,
+      product_code: displayItem.product_code,
+      selling_price: displayItem.selling_price,
+      image_url: imageUrl
+    });
+  };
 
   return (
     <div className={cn("group glass-card overflow-hidden flex flex-col h-full", className)}>
@@ -26,10 +45,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
           <button 
             className="flex items-center gap-2 bg-background/90 text-foreground px-6 py-2.5 rounded-full font-medium shadow-lg hover:bg-primary hover:text-primary-foreground transition-all duration-300 transform translate-y-4 group-hover:translate-y-0"
-            onClick={(e) => {
-              e.preventDefault();
-              // Add to cart logic will go here in Phase 6
-            }}
+            onClick={handleQuickAdd}
           >
             <ShoppingCart className="h-4 w-4" />
             Quick Add

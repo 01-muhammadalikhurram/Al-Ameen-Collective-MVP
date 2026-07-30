@@ -2,6 +2,9 @@ import { Router } from 'express';
 import { API_VERSION } from '../constants';
 import healthRoutes from './health.routes';
 
+import { authRouter } from './auth.routes';
+import { configRouter } from './config.routes';
+
 /**
  * Root route aggregator.
  * All feature routes will be mounted here under /api/v1.
@@ -11,9 +14,8 @@ const router = Router();
 
 // System routes
 router.use(healthRoutes);
-
-// Feature routes will be added here as development progresses:
-// router.use('/products', productRoutes);
+router.use('/admin', authRouter);
+router.use('/config', configRouter);
 // router.use('/orders', orderRoutes);
 // router.use('/admin', adminRoutes);
 // router.use('/vendor', vendorRoutes);

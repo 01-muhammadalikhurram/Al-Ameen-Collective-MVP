@@ -1,22 +1,24 @@
 import { Request, Response, NextFunction } from 'express';
 import { logger } from '../config/logger';
+import { ApiError } from '../utils/ApiError';
+import { ApiResponse } from '../utils/ApiResponse';
 
 /**
  * Global error handling middleware.
  * Catches all unhandled errors and returns a consistent JSON response.
  * Never exposes stack traces or internal details to the client (Doc 05 Section 17 & 20).
  */
-export function errorHandler(err: Error, _req: Request, res: Response, _next: NextFunction) {
-  logger.error({ err }, 'Unhandled error');
+export const errorHandler = (err: Error, req: Request, res: Response, _next: NextFunction): void => {
+  logger.error(
+    { err, method: req.method, url: req.url, body: req.body, query: req.query },
+    'Unhandled error occurred',
+  );
 
-  const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
+  if (err instanceof ApiError) {
+    res.status(err.statusCode).json(ApiResponse.error(err.message, err.errors));
+    return;
+  }
 
-  res.status(statusCode).json({
-    success: false,
-    message:
-      process.env.NODE_ENV === 'production'
-        ? 'An unexpected error occurred. Please try again later.'
-        : err.message,
-    errors: [],
-  });
-}
+  // Fallback for unhandled server errors
+  res.status(500).json(ApiResponse.error('Internal Server Error'));
+};

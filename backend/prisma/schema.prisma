@@ -1,0 +1,206 @@
+// This is the Prisma schema file for Al Ameen Collective.
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// -----------------------------------------------------------------------------
+// Enums
+// -----------------------------------------------------------------------------
+
+enum ProductStatus {
+  ACTIVE
+  OUT_OF_STOCK
+  HIDDEN
+  ARCHIVED
+}
+
+enum ItemStatus {
+  ACTIVE
+  OUT_OF_STOCK
+  HIDDEN
+  ARCHIVED
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  DELIVERED
+}
+
+// -----------------------------------------------------------------------------
+// Core Entities
+// -----------------------------------------------------------------------------
+
+model Admin {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username      String   @unique @db.VarChar(50)
+  password_hash String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  @@map("admins")
+}
+
+model Product {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String        @db.VarChar(255)
+  slug        String        @unique @db.VarChar(255)
+  description String?       @db.Text
+  fabric      String        @db.VarChar(100)
+  category    String        @db.VarChar(100)
+  season      String        @db.VarChar(100)
+  status      ProductStatus @default(ACTIVE)
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+
+  items ProductItem[]
+
+  @@index([slug])
+  @@index([status])
+  @@map("products")
+}
+
+model Media {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  url        String   @db.Text
+  alt_text   String?  @db.VarChar(255)
+  file_name  String   @db.VarChar(255)
+  created_at DateTime @default(now())
+
+  items ProductItem[] // A media item can be linked to multiple product items
+
+  @@map("media")
+}
+
+model ProductItem {
+  id                String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  product_id        String     @db.Uuid
+  media_id          String?    @db.Uuid
+  product_code      String     @unique @db.VarChar(100)
+  color             String     @db.VarChar(100)
+  wholesale_price   Decimal    @db.Decimal(10, 2)
+  additional_profit Decimal    @default(0) @db.Decimal(10, 2)
+  status            ItemStatus @default(ACTIVE)
+  created_at        DateTime   @default(now())
+  updated_at        DateTime   @updatedAt
+
+  product    Product     @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  media      Media?      @relation(fields: [media_id], references: [id], onDelete: SetNull)
+  orderItems OrderItem[]
+
+  @@index([product_code])
+  @@index([product_id])
+  @@index([status])
+  @@map("product_items")
+}
+
+// -----------------------------------------------------------------------------
+// Orders System
+// -----------------------------------------------------------------------------
+
+model Order {
+  id               String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  public_order_id  String      @unique @db.VarChar(50)
+  customer_name    String      @db.VarChar(255)
+  customer_phone   String      @db.VarChar(50)
+  customer_address String      @db.Text
+  notes            String?     @db.Text
+  delivery_charge  Decimal     @db.Decimal(10, 2)
+  subtotal         Decimal     @db.Decimal(12, 2)
+  total            Decimal     @db.Decimal(12, 2)
+  status           OrderStatus @default(PENDING)
+  vendor_token     String      @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at       DateTime    @default(now())
+  updated_at       DateTime    @updatedAt
+
+  items   OrderItem[]
+  history OrderHistory[]
+
+  @@index([public_order_id])
+  @@index([customer_phone])
+  @@index([status])
+  @@map("orders")
+}
+
+model OrderItem {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id        String   @db.Uuid
+  item_id         String   @db.Uuid // renamed from variant_id
+  quantity        Int
+  wholesale_price Decimal  @db.Decimal(10, 2)
+  selling_price   Decimal  @db.Decimal(10, 2)
+  profit          Decimal  @db.Decimal(10, 2)
+  created_at      DateTime @default(now())
+
+  order       Order       @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  productItem ProductItem @relation(fields: [item_id], references: [id], onDelete: Restrict)
+
+  @@index([order_id])
+  @@index([item_id])
+  @@map("order_items")
+}
+
+model OrderHistory {
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id   String      @db.Uuid
+  status     OrderStatus
+  notes      String?     @db.Text
+  created_at DateTime    @default(now())
+
+  order Order @relation(fields: [order_id], references: [id], onDelete: Cascade)
+
+  @@index([order_id])
+  @@map("order_history")
+}
+
+// -----------------------------------------------------------------------------
+// Business Rules & Configuration
+// -----------------------------------------------------------------------------
+
+model PricingRule {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  global_profit Decimal  @db.Decimal(10, 2)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  @@map("pricing_rules")
+}
+
+model DeliveryRule {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  minimum_order       Decimal  @db.Decimal(10, 2)
+  discount_percentage Decimal  @db.Decimal(5, 2)
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+
+  @@map("delivery_rules")
+}
+
+model Announcement {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  message       String   @db.Text
+  active        Boolean  @default(true)
+  display_order Int      @default(0)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  @@map("announcements")
+}
+
+model WebsiteSetting {
+  id                      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  default_delivery_charge Decimal  @db.Decimal(10, 2)
+  cart_expiry_days        Int      @default(7)
+  whatsapp_number         String   @db.VarChar(50)
+  business_name           String   @db.VarChar(255)
+  updated_at              DateTime @updatedAt
+
+  @@map("website_settings")
+}

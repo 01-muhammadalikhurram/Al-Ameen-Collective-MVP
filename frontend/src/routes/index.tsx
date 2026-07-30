@@ -5,6 +5,7 @@ import { CatalogPage } from '../pages/CatalogPage';
 import { ProductDetailsPage } from '../pages/ProductDetailsPage';
 import { CartPage } from '../pages/CartPage';
 import { CheckoutPage } from '../pages/CheckoutPage';
+import { OrderSuccessPage } from '../pages/OrderSuccessPage';
 
 /**
  * Global route definitions.
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
       {
         path: 'checkout',
         element: <CheckoutPage />,
+      },
+      {
+        path: 'order-success/:publicId',
+        element: <OrderSuccessPage />,
       }
     ],
   },

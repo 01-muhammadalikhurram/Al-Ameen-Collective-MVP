@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useCartStore } from '../store/cartStore';
 import { useConfig } from '../api/config';
+import { useCreateOrder } from '../api/orders';
 
 // Pakistani phone regex handling multiple formats: 0310..., 92310..., +92310...
 const phoneRegex = /^(\+92|92|0)?3\d{9}$/;
@@ -24,9 +24,10 @@ const checkoutSchema = z.object({
 type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
 export function CheckoutPage() {
+  const navigate = useNavigate();
   const { items, clearCart } = useCartStore();
   const { data: config } = useConfig();
-  const [isSuccess, setIsSuccess] = useState(false);
+  const createOrderMutation = useCreateOrder();
 
   const {
     register,
@@ -43,7 +44,8 @@ export function CheckoutPage() {
   const subtotal = items.reduce((sum, item) => sum + (Number(item.selling_price) * item.quantity), 0);
 
   // Calculate Shipping Cost
-  let shippingCost = Number(config?.settings?.default_delivery_charge || 0);
+  const defaultDeliveryCharge = Number(config?.settings?.default_delivery_charge || 0);
+  let shippingCost = defaultDeliveryCharge;
   
   if (config?.deliveryRules && config.deliveryRules.length > 0) {
     // Sort rules descending by minimum_order to find the highest threshold we meet
@@ -51,43 +53,35 @@ export function CheckoutPage() {
     const applicableRule = sortedRules.find((rule) => subtotal >= Number(rule.minimum_order));
     
     if (applicableRule) {
-      shippingCost = Number(applicableRule.delivery_charge);
+      const discountPercentage = Number(applicableRule.discount_percentage);
+      const discountMultiplier = Math.max(0, 1 - (discountPercentage / 100));
+      shippingCost = defaultDeliveryCharge * discountMultiplier;
     }
   }
 
   const total = subtotal + shippingCost;
 
   const onSubmit = async (data: CheckoutFormValues) => {
-    // Simulate API call for Phase 7
-    console.log('Checkout Data:', { ...data, subtotal, shippingCost, total, items });
-    
-    // Artificial delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    // Clear cart and show success (Phase 8 will actually save this to the DB)
-    clearCart();
-    setIsSuccess(true);
-  };
+    try {
+      const orderPayload = {
+        customer_name: `${data.firstName} ${data.lastName}`,
+        customer_phone: data.phone,
+        customer_address: `${data.address}, ${data.city}, ${data.province}, ${data.postalCode}`,
+        notes: data.email ? `Email: ${data.email}` : undefined,
+        items: items.map(item => ({
+          item_id: item.id,
+          quantity: item.quantity,
+        })),
+      };
 
-  if (isSuccess) {
-    return (
-      <div className="container mx-auto px-4 py-24 min-h-[60vh] flex flex-col items-center justify-center text-center">
-        <div className="w-24 h-24 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mb-6">
-          <CheckCircle2 className="h-12 w-12" />
-        </div>
-        <h1 className="text-4xl font-heading font-bold mb-4">Order Placed Successfully!</h1>
-        <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-          Thank you for your order. We've received it and are preparing it for shipment.
-        </p>
-        <Link 
-          to="/products" 
-          className="px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-md hover:bg-primary/90 transition-colors"
-        >
-          Continue Shopping
-        </Link>
-      </div>
-    );
-  }
+      const result = await createOrderMutation.mutateAsync(orderPayload);
+      clearCart();
+      navigate(`/order-success/${result.public_order_id}`);
+    } catch (error) {
+      console.error('Failed to create order', error);
+      alert('Failed to place order. Please try again.');
+    }
+  };
 
   if (items.length === 0) {
     return (

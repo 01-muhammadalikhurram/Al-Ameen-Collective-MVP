@@ -14,7 +14,7 @@ export interface WebsiteSetting {
 export interface DeliveryRule {
   id: string;
   minimum_order: string; // Decimal
-  delivery_charge: string; // Decimal
+  discount_percentage: string; // Decimal
 }
 
 export interface ConfigResponse {

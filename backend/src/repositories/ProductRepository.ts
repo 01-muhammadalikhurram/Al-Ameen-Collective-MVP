@@ -77,4 +77,11 @@ export class ProductRepository {
       },
     });
   }
+
+  async getProductItemById(id: string) {
+    return this.db.productItem.findUnique({
+      where: { id },
+      include: { product: true },
+    });
+  }
 }

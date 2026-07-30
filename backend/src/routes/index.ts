@@ -5,6 +5,7 @@ import healthRoutes from './health.routes';
 import { authRouter } from './auth.routes';
 import { configRouter } from './config.routes';
 import { productRoutes } from './product.routes';
+import { orderRoutes } from './order.routes';
 
 /**
  * Root route aggregator.
@@ -18,7 +19,7 @@ router.use(healthRoutes);
 router.use('/admin', authRouter);
 router.use('/config', configRouter);
 router.use('/products', productRoutes);
-// router.use('/orders', orderRoutes);
+router.use('/orders', orderRoutes);
 // router.use('/admin', adminRoutes);
 // router.use('/vendor', vendorRoutes);
 // router.use('/pricing', pricingRoutes);

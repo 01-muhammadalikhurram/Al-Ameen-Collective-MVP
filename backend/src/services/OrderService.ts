@@ -135,4 +135,35 @@ export class OrderService {
     }
     return order;
   }
+
+  async getOrderByVendorToken(vendorToken: string) {
+    const order = await this.orderRepo.getOrderByVendorToken(vendorToken);
+    if (!order) {
+      throw new ApiError(404, 'Order not found');
+    }
+
+    // Since the vendor page needs wholesale price and profit (per user feedback), 
+    // we can return the entire order which contains these fields.
+    // Let's explicitly format it to make sure we don't accidentally leak anything else.
+    return {
+      public_order_id: order.public_order_id,
+      customer_name: order.customer_name,
+      customer_phone: order.customer_phone,
+      customer_address: order.customer_address,
+      notes: order.notes,
+      delivery_charge: order.delivery_charge,
+      subtotal: order.subtotal,
+      total: order.total,
+      status: order.status,
+      created_at: order.created_at,
+      items: order.items.map((item) => ({
+        id: item.id,
+        quantity: item.quantity,
+        wholesale_price: item.wholesale_price,
+        selling_price: item.selling_price,
+        profit: item.profit,
+        productItem: item.productItem
+      }))
+    };
+  }
 }

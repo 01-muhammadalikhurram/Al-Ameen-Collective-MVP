@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, ShoppingBag, Settings, LogOut, Package } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Settings, LogOut, PackageSearch } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 
 export function AdminLayout() {
@@ -9,8 +9,8 @@ export function AdminLayout() {
 
   const navigation = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
+    { name: 'Products', href: '/admin/products', icon: PackageSearch },
     { name: 'Orders', href: '/admin/orders', icon: ShoppingBag },
-    { name: 'Products', href: '/admin/products', icon: Package },
     { name: 'Settings', href: '/admin/settings', icon: Settings },
   ];
 

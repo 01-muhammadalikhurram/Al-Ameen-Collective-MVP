@@ -47,4 +47,14 @@ export class OrderController {
       next(error);
     }
   };
+
+  getOrderByVendorToken = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const token = req.params.token as string;
+      const order = await this.orderService.getOrderByVendorToken(token);
+      res.status(200).json(ApiResponse.success('Vendor order retrieved', order));
+    } catch (error) {
+      next(error);
+    }
+  };
 }

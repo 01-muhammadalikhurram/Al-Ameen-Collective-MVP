@@ -1,4 +1,4 @@
-import { WebsiteSetting, PricingRule, DeliveryRule, Prisma } from '@prisma/client';
+import { WebsiteSetting, PricingRule, DeliveryRule, Announcement, Prisma } from '@prisma/client';
 import { prisma } from '../config/prisma';
 
 export class ConfigRepository {
@@ -35,5 +35,31 @@ export class ConfigRepository {
 
   async deleteDeliveryRule(id: string): Promise<DeliveryRule> {
     return this.db.deliveryRule.delete({ where: { id } });
+  }
+
+  // Announcements
+  async getAnnouncements(): Promise<Announcement[]> {
+    return this.db.announcement.findMany({
+      orderBy: { display_order: 'asc' },
+    });
+  }
+
+  async getPublicAnnouncements(): Promise<Announcement[]> {
+    return this.db.announcement.findMany({
+      where: { active: true },
+      orderBy: { display_order: 'asc' },
+    });
+  }
+
+  async createAnnouncement(data: Prisma.AnnouncementCreateInput): Promise<Announcement> {
+    return this.db.announcement.create({ data });
+  }
+
+  async updateAnnouncement(id: string, data: Prisma.AnnouncementUpdateInput): Promise<Announcement> {
+    return this.db.announcement.update({ where: { id }, data });
+  }
+
+  async deleteAnnouncement(id: string): Promise<Announcement> {
+    return this.db.announcement.delete({ where: { id } });
   }
 }

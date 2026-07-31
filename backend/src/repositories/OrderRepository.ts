@@ -102,6 +102,28 @@ export class OrderRepository {
     });
   }
 
+  async getOrderByVendorToken(vendorToken: string) {
+    return this.db.order.findUnique({
+      where: { vendor_token: vendorToken },
+      include: {
+        items: {
+          include: {
+            productItem: {
+              include: {
+                product: {
+                  select: { name: true }
+                },
+                media: {
+                  select: { url: true }
+                },
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
   async updateOrderStatus(id: string, status: OrderStatus, notes?: string): Promise<Order> {
     return this.db.$transaction(async (tx) => {
       const order = await tx.order.update({

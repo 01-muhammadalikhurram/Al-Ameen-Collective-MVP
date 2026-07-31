@@ -10,6 +10,8 @@ import { AdminLayout } from '../layouts/AdminLayout';
 import { AdminLoginPage } from '../pages/admin/AdminLoginPage';
 import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
 import { AdminOrdersPage } from '../pages/admin/AdminOrdersPage';
+import { AdminSettingsPage } from '../pages/admin/AdminSettingsPage';
+import { VendorOrderPage } from '../pages/vendor/VendorOrderPage';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 
 /**
@@ -44,7 +46,11 @@ export const router = createBrowserRouter([
       {
         path: 'order-success/:publicId',
         element: <OrderSuccessPage />,
-      }
+      },
+      {
+        path: 'vendor/:token',
+        element: <VendorOrderPage />,
+      },
     ],
   },
   {
@@ -81,7 +87,7 @@ export const router = createBrowserRouter([
           },
           {
             path: 'settings',
-            element: <div className="p-8">Settings Placeholder</div>,
+            element: <AdminSettingsPage />,
           }
         ]
       }

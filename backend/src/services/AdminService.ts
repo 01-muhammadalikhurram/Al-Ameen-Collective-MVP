@@ -210,10 +210,28 @@ export class AdminService {
         }
       });
 
+      if (newStatus === 'CONFIRMED') {
+        const existingToken = await tx.vendorAccessToken.findFirst({
+          where: { order_id: orderId, is_active: true }
+        });
+        if (!existingToken) {
+          await tx.vendorAccessToken.create({
+            data: { order_id: orderId }
+          });
+        }
+      }
+
       return order;
     });
 
-    return updatedOrder;
+    const vendorToken = await this.db.vendorAccessToken.findFirst({
+      where: { order_id: orderId, is_active: true }
+    });
+
+    return {
+      ...updatedOrder,
+      vendor_token: vendorToken?.token || null
+    };
   }
 
   // --- Admin Product Management ---

@@ -3,6 +3,7 @@ import type { Product } from '../api/products';
 import { ShoppingCart } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useCartStore } from '../store/cartStore';
+import toast from 'react-hot-toast';
 
 interface ProductCardProps {
   product: Product;
@@ -29,8 +30,11 @@ export function ProductCard({ product, className }: ProductCardProps) {
       color: displayItem.color,
       product_code: displayItem.product_code,
       selling_price: displayItem.selling_price,
-      image_url: imageUrl
+      image_url: imageUrl,
+      quantity: 1
     });
+    
+    toast.success('Added to cart!');
   };
 
   return (

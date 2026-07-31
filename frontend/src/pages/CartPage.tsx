@@ -21,7 +21,7 @@ export function CartPage() {
         </p>
         <Link 
           to="/products" 
-          className="px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-md hover:bg-primary/90 transition-colors"
+          className="px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-[12px] hover:bg-primary/90 transition-all hover:scale-[1.02] shadow-sm cursor-pointer"
         >
           Start Shopping
         </Link>
@@ -63,7 +63,8 @@ export function CartPage() {
                       <Link to={`/products/${item.slug}`} className="font-heading font-semibold text-lg hover:text-primary transition-colors">
                         {item.name}
                       </Link>
-                      <p className="text-sm text-muted-foreground mt-1 mb-2">Color: {item.color}</p>
+                      <p className="text-sm text-muted-foreground mt-1 mb-1">Color: {item.color}</p>
+                      <p className="text-xs text-muted-foreground mb-2 font-mono">Code: {item.product_code || 'N/A'}</p>
                       <p className="text-sm font-medium">Rs {item.selling_price}</p>
                     </div>
                   </div>
@@ -153,7 +154,7 @@ export function CartPage() {
 
             <Link 
               to="/checkout" 
-              className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground py-4 rounded-md font-semibold hover:bg-primary/90 transition-colors shadow-lg"
+              className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground py-4 rounded-[12px] font-semibold hover:bg-primary/90 transition-all hover:scale-[1.02] shadow-lg cursor-pointer"
             >
               Proceed to Checkout
               <ArrowRight className="h-4 w-4" />

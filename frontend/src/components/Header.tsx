@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { ShoppingCart, Menu, Search } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
 import { useCartStore } from '../store/cartStore';
 
 export function Header() {

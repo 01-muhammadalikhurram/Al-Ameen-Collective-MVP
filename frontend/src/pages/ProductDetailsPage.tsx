@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { ShoppingCart, Check, ChevronRight } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useCartStore } from '../store/cartStore';
+import toast from 'react-hot-toast';
 
 export function ProductDetailsPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -61,6 +62,8 @@ export function ProductDetailsPage() {
       image_url: imageUrl,
       quantity: quantity
     });
+    
+    toast.success(`${quantity} ${quantity > 1 ? 'items' : 'item'} added to cart!`);
   };
 
   return (

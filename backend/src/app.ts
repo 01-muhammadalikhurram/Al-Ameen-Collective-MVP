@@ -20,7 +20,20 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: config.CORS_ORIGIN,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      
+      const isLocalhost = origin.includes('localhost');
+      const isVercel = origin.includes('vercel.app');
+      const isConfigOrigin = origin === config.CORS_ORIGIN;
+      
+      if (isLocalhost || isVercel || isConfigOrigin) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],

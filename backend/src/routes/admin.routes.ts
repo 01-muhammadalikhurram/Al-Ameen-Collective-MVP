@@ -1,9 +1,14 @@
 import { Router, RequestHandler } from 'express';
 import { AdminController } from '../controllers/AdminController';
+import { ProductController } from '../controllers/ProductController';
 import { authMiddleware } from '../middleware/auth';
+import multer from 'multer';
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 const router = Router();
 const adminController = new AdminController();
+const productController = new ProductController();
 
 // Cast middleware/handlers to avoid Express typing conflicts
 const auth = authMiddleware as unknown as RequestHandler;
@@ -86,5 +91,18 @@ router.get('/orders', auth, adminController.getOrders as unknown as RequestHandl
  *                 type: string
  */
 router.patch('/orders/:orderId/status', auth, adminController.updateOrderStatus as unknown as RequestHandler);
+
+/**
+ * @openapi
+ * /admin/products:
+ *   post:
+ *     summary: Create a new product with variants and images
+ *     description: Creates a product. Accepts multipart/form-data with 'data' (JSON string) and 'images' (files).
+ *     tags:
+ *       - Admin
+ *     security:
+ *       - bearerAuth: []
+ */
+router.post('/products', auth, upload.array('images', 10) as unknown as RequestHandler, productController.createProduct as unknown as RequestHandler);
 
 export { router as adminRoutes };

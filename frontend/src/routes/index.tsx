@@ -11,6 +11,8 @@ import { AdminLoginPage } from '../pages/admin/AdminLoginPage';
 import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
 import { AdminOrdersPage } from '../pages/admin/AdminOrdersPage';
 import { AdminSettingsPage } from '../pages/admin/AdminSettingsPage';
+import { AdminProductsPage } from '../pages/admin/AdminProductsPage';
+import { AdminProductCreatePage } from '../pages/admin/AdminProductCreatePage';
 import { VendorOrderPage } from '../pages/vendor/VendorOrderPage';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 
@@ -87,7 +89,11 @@ export const router = createBrowserRouter([
           },
           {
             path: 'products',
-            element: <div className="p-8">Products Placeholder</div>,
+            element: <AdminProductsPage />,
+          },
+          {
+            path: 'products/new',
+            element: <AdminProductCreatePage />,
           },
           {
             path: 'settings',

@@ -15,6 +15,8 @@ const envSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1, 'SUPABASE_SERVICE_ROLE_KEY is required'),
   SUPABASE_STORAGE_BUCKET: z.string().default('product-images'),
 
+  CLOUDINARY_URL: z.string().url().startsWith('cloudinary://'),
+
   JWT_SECRET: z.string().min(16, 'JWT_SECRET must be at least 16 characters'),
   JWT_EXPIRATION: z.string().default('24h'),
 

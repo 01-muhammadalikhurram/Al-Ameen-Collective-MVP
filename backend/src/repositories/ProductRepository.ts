@@ -84,4 +84,43 @@ export class ProductRepository {
       include: { product: true },
     });
   }
+
+  async createProduct(productData: Omit<Prisma.ProductCreateInput, 'items'>, itemsData: any[]) {
+    return this.db.$transaction(async (tx) => {
+      // 1. Create the main product
+      const product = await tx.product.create({
+        data: productData,
+      });
+
+      // 2. Create the variants and their associated media
+      for (const item of itemsData) {
+        let mediaId = undefined;
+
+        // If the item has media URL, create Media record first
+        if (item.mediaUrl) {
+          const media = await tx.media.create({
+            data: {
+              url: item.mediaUrl,
+              file_name: item.mediaFileName || 'uploaded_image',
+            },
+          });
+          mediaId = media.id;
+        }
+
+        // Create the product item
+        await tx.productItem.create({
+          data: {
+            product_id: product.id,
+            product_code: item.product_code,
+            color: item.color,
+            wholesale_price: item.wholesale_price,
+            additional_profit: item.additional_profit,
+            media_id: mediaId,
+          },
+        });
+      }
+
+      return product;
+    });
+  }
 }

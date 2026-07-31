@@ -49,16 +49,17 @@ model Admin {
 }
 
 model Product {
-  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name        String        @db.VarChar(255)
-  slug        String        @unique @db.VarChar(255)
-  description String?       @db.Text
-  fabric      String        @db.VarChar(100)
-  category    String        @db.VarChar(100)
-  season      String        @db.VarChar(100)
-  status      ProductStatus @default(ACTIVE)
-  created_at  DateTime      @default(now())
-  updated_at  DateTime      @updatedAt
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String        @db.VarChar(255)
+  slug         String        @unique @db.VarChar(255)
+  description  String?       @db.Text
+  summary_desc String?       @db.Text
+  fabric       String        @db.VarChar(100)
+  category     String        @db.VarChar(100)
+  season       String        @db.VarChar(100)
+  status       ProductStatus @default(ACTIVE)
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
 
   items ProductItem[]
 

@@ -8,7 +8,16 @@ import { logger } from './logger';
 // This prevents exhausting connection limits during hot reloading and development
 const connectionString = config.DATABASE_URL;
 
-const pool = new Pool({ connectionString });
+const pool = new Pool({
+  connectionString,
+  ssl: { rejectUnauthorized: false }
+});
+
+pool.on('error', (err) => {
+  logger.error(err, 'Unexpected error on idle pg client');
+  process.exit(-1);
+});
+
 const adapter = new PrismaPg(pool);
 
 export const prisma = new PrismaClient({

@@ -9,6 +9,7 @@ import { OrderSuccessPage } from '../pages/OrderSuccessPage';
 import { AdminLayout } from '../layouts/AdminLayout';
 import { AdminLoginPage } from '../pages/admin/AdminLoginPage';
 import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
+import { AdminOrdersPage } from '../pages/admin/AdminOrdersPage';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 
 /**
@@ -70,10 +71,9 @@ export const router = createBrowserRouter([
             path: 'dashboard',
             element: <AdminDashboardPage />,
           },
-          // Future Sprint 10 & 11 pages will go here
           {
             path: 'orders',
-            element: <div className="p-8">Orders Placeholder</div>,
+            element: <AdminOrdersPage />,
           },
           {
             path: 'products',

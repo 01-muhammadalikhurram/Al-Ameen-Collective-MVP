@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthService } from '../services/AuthService';
 import { ApiResponse } from '../utils/ApiResponse';
+import { AuthRequest } from '../middleware/auth';
 
 export class AuthController {
   private authService: AuthService;
@@ -21,10 +22,11 @@ export class AuthController {
 
   getMe = (req: Request, res: Response, next: NextFunction): void => {
     try {
-      const authReq = req as unknown as { user: any };
+      const authReq = req as AuthRequest;
       res.status(200).json(ApiResponse.success('User retrieved successfully', authReq.user));
     } catch (error) {
       next(error);
     }
   };
 }
+

@@ -70,7 +70,6 @@ export function HomePage() {
           </Link>
         </div>
       </section>
-      </section>
     </div>
   );
 }

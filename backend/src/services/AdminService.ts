@@ -123,7 +123,11 @@ export class AdminService {
     ]);
 
     return {
-      orders,
+      orders: orders.map(order => ({
+        ...order,
+        vendor_token: order.vendorTokens[0]?.token || null,
+        vendorTokens: undefined // remove the array from the payload to keep it clean
+      })),
       pagination: {
         page,
         limit,
@@ -141,18 +145,18 @@ export class AdminService {
           include: {
             productItem: {
               include: {
-                product: {
-                  select: { name: true }
-                },
-                media: {
-                  select: { url: true }
-                }
+                product: { select: { name: true } },
+                media: true
               }
             }
           }
         },
         history: {
           orderBy: { created_at: 'desc' }
+        },
+        vendorTokens: {
+          where: { is_active: true },
+          take: 1
         }
       }
     });

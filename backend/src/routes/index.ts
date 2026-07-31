@@ -7,6 +7,7 @@ import { adminRoutes } from './admin.routes';
 import { configRouter } from './config.routes';
 import { productRoutes } from './product.routes';
 import { orderRoutes } from './order.routes';
+import { vendorRoutes } from './vendor.routes';
 
 /**
  * Root route aggregator.
@@ -22,7 +23,7 @@ router.use('/admin', adminRoutes);
 router.use('/config', configRouter);
 router.use('/products', productRoutes);
 router.use('/orders', orderRoutes);
-// router.use('/vendor', vendorRoutes);
+router.use('/vendor', vendorRoutes);
 // router.use('/pricing', pricingRoutes);
 // router.use('/delivery', deliveryRoutes);
 // router.use('/announcements', announcementRoutes);

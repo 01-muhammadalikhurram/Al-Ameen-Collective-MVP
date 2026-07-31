@@ -117,12 +117,12 @@ model Order {
   subtotal         Decimal     @db.Decimal(12, 2)
   total            Decimal     @db.Decimal(12, 2)
   status           OrderStatus @default(PENDING)
-  vendor_token     String      @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   created_at       DateTime    @default(now())
   updated_at       DateTime    @updatedAt
 
-  items   OrderItem[]
-  history OrderHistory[]
+  items        OrderItem[]
+  history      OrderHistory[]
+  vendorTokens VendorAccessToken[]
 
   @@index([public_order_id])
   @@index([customer_phone])
@@ -159,6 +159,22 @@ model OrderHistory {
 
   @@index([order_id])
   @@map("order_history")
+}
+
+model VendorAccessToken {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id         String    @db.Uuid
+  token            String    @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  is_active        Boolean   @default(true)
+  expires_at       DateTime?
+  created_at       DateTime  @default(now())
+  last_accessed_at DateTime?
+
+  order Order @relation(fields: [order_id], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([order_id])
+  @@map("vendor_access_tokens")
 }
 
 // -----------------------------------------------------------------------------

@@ -167,21 +167,23 @@ export function AdminOrderDetailModal({ order, onClose, onStatusUpdate }: AdminO
           </div>
 
           {/* Vendor Link */}
-          <div className="bg-muted/30 rounded-lg p-4">
-            <h3 className="text-sm font-semibold text-foreground mb-2">Vendor Link</h3>
-            <div className="flex items-center gap-2">
-              <code className="flex-1 text-xs bg-background px-3 py-2 rounded-md border border-border overflow-hidden text-ellipsis whitespace-nowrap">
-                {window.location.origin}/vendor/{order.vendor_token}
-              </code>
-              <button
-                onClick={copyVendorLink}
-                className="p-2 rounded-md border border-border hover:bg-muted transition-colors shrink-0"
-                title="Copy vendor link"
-              >
-                <Copy className="h-4 w-4" />
-              </button>
+          {order.vendor_token && (
+            <div className="bg-muted/30 rounded-lg p-4">
+              <h3 className="text-sm font-semibold text-foreground mb-2">Vendor Link</h3>
+              <div className="flex items-center gap-2">
+                <code className="flex-1 text-xs bg-background px-3 py-2 rounded-md border border-border overflow-hidden text-ellipsis whitespace-nowrap">
+                  {window.location.origin}/vendor/{order.vendor_token}
+                </code>
+                <button
+                  onClick={copyVendorLink}
+                  className="p-2 rounded-md border border-border hover:bg-muted transition-colors shrink-0"
+                  title="Copy vendor link"
+                >
+                  <Copy className="h-4 w-4" />
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Order History Timeline */}
           {order.history && order.history.length > 0 && (

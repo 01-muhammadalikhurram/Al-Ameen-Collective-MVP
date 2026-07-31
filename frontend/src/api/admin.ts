@@ -59,7 +59,7 @@ export interface AdminOrder {
   subtotal: string;
   total: string;
   status: OrderStatus;
-  vendor_token: string;
+  vendor_token: string | null;
   created_at: string;
   updated_at: string;
   items: OrderItem[];

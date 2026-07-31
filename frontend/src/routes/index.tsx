@@ -50,19 +50,11 @@ export const router = createBrowserRouter([
         path: 'order-success/:publicId',
         element: <OrderSuccessPage />,
       },
-      {
-        path: 'vendor/:token',
-        element: <VendorOrderPage />,
-      },
     ],
   },
   {
-    path: '/vendor',
-    element: (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <h1 className="text-2xl font-bold text-accent">Vendor Portal Placeholder</h1>
-      </div>
-    ),
+    path: '/vendor/:token',
+    element: <VendorOrderPage />,
   },
   {
     path: '/admin/login',

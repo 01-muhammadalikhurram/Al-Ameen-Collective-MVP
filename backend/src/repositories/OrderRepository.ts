@@ -103,25 +103,32 @@ export class OrderRepository {
   }
 
   async getOrderByVendorToken(vendorToken: string) {
-    return this.db.order.findUnique({
-      where: { vendor_token: vendorToken },
+    const tokenRecord = await this.db.vendorAccessToken.findUnique({
+      where: { token: vendorToken, is_active: true },
       include: {
-        items: {
+        order: {
           include: {
-            productItem: {
+            items: {
               include: {
-                product: {
-                  select: { name: true }
-                },
-                media: {
-                  select: { url: true }
-                },
+                productItem: {
+                  include: {
+                    product: {
+                      select: { name: true }
+                    },
+                    media: {
+                      select: { url: true }
+                    },
+                  }
+                }
               }
             }
           }
         }
       }
     });
+
+    if (!tokenRecord) return null;
+    return tokenRecord.order;
   }
 
   async updateOrderStatus(id: string, status: OrderStatus, notes?: string): Promise<Order> {
@@ -138,6 +145,17 @@ export class OrderRepository {
           notes,
         }
       });
+
+      if (status === OrderStatus.CONFIRMED) {
+        const existingToken = await tx.vendorAccessToken.findFirst({
+          where: { order_id: id, is_active: true }
+        });
+        if (!existingToken) {
+          await tx.vendorAccessToken.create({
+            data: { order_id: id }
+          });
+        }
+      }
 
       return order;
     });

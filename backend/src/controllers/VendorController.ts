@@ -9,7 +9,7 @@ export class VendorController {
     this.vendorService = new VendorService();
   }
 
-  getVendorOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  getVendorOrder = async (req: Request<{ token: string }>, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { token } = req.params;
       const orderData = await this.vendorService.getVendorOrder(token);

@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useVendorOrder } from '../../api/vendor';
 import { Package, User, Truck, Receipt } from 'lucide-react';
-import { format } from 'date-fns';
 
 export function VendorOrderPage() {
   const { token } = useParams<{ token: string }>();
@@ -69,7 +68,10 @@ export function VendorOrderPage() {
           </div>
           <div className="mt-4 pt-4 border-t border-border/50 text-sm text-muted-foreground flex items-center gap-2">
             <span className="font-medium">Placed:</span>
-            {format(new Date(order.created_at), 'dd MMM yyyy, h:mm a')}
+            {new Date(order.created_at).toLocaleDateString('en-PK', {
+              day: '2-digit', month: 'short', year: 'numeric',
+              hour: '2-digit', minute: '2-digit'
+            })}
           </div>
         </div>
 

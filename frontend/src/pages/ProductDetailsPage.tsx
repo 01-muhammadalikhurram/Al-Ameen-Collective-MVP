@@ -11,6 +11,7 @@ export function ProductDetailsPage() {
   const { data: product, isLoading, error } = useProduct(slug || '');
   
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [quantity, setQuantity] = useState(1);
   const addItem = useCartStore((state) => state.addItem);
 
   // Set default item when product loads
@@ -45,8 +46,6 @@ export function ProductDetailsPage() {
 
   const selectedItem = product.items.find(i => i.id === selectedItemId) || product.items[0];
   const imageUrl = selectedItem?.media?.url || 'https://via.placeholder.com/800x1000?text=No+Image';
-
-  const [quantity, setQuantity] = useState(1);
 
   const handleAddToCart = () => {
     if (!selectedItem) return;

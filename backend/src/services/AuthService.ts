@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+
 import jwt from 'jsonwebtoken';
 import { AdminRepository } from '../repositories/AdminRepository';
 import { ApiError } from '../utils/ApiError';

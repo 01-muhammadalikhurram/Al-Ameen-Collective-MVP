@@ -82,4 +82,43 @@ export class ProductController {
       next(error);
     }
   };
+
+  updateProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const id = req.params.id as string;
+      const rawData = req.body.data;
+      if (!rawData) {
+        throw new Error('Missing product data payload');
+      }
+      
+      const payload = JSON.parse(rawData);
+
+      // We can use the same schema or a partial one, assuming full replace for MVP
+      const validated = createProductSchema.parse({ body: payload });
+      const productData = validated.body;
+
+      const files = req.files as Express.Multer.File[] || [];
+      const itemsWithMedia = await Promise.all(
+        productData.items.map(async (item) => {
+          let mediaUrl: string | undefined;
+          let mediaFileName: string | undefined;
+
+          if (typeof item.fileIndex === 'number' && files[item.fileIndex]) {
+            const file = files[item.fileIndex];
+            mediaUrl = await this.storageService.uploadImage(file.buffer, file.originalname);
+            mediaFileName = file.originalname;
+          }
+
+          return { ...item, mediaUrl, mediaFileName };
+        })
+      );
+
+      productData.items = itemsWithMedia as any;
+      const updatedProduct = await this.productService.updateProduct(id, productData);
+
+      res.status(200).json(ApiResponse.success('Product updated successfully', updatedProduct));
+    } catch (error) {
+      next(error);
+    }
+  };
 }

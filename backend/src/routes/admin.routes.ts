@@ -104,5 +104,10 @@ router.patch('/orders/:orderId/status', auth, adminController.updateOrderStatus 
  *       - bearerAuth: []
  */
 router.post('/products', auth, upload.array('images', 10) as unknown as RequestHandler, productController.createProduct as unknown as RequestHandler);
+router.get('/products/:id', auth, adminController.getProductById as unknown as RequestHandler);
+router.put('/products/:id', auth, upload.array('images', 10) as unknown as RequestHandler, productController.updateProduct as unknown as RequestHandler);
+router.get('/products', auth, adminController.getProducts as unknown as RequestHandler);
+router.patch('/products/:id/status', auth, adminController.updateProductStatus as unknown as RequestHandler);
+router.delete('/products/:id', auth, adminController.deleteProduct as unknown as RequestHandler);
 
 export { router as adminRoutes };

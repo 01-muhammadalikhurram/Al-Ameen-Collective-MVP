@@ -124,3 +124,71 @@ export const useUpdateOrderStatus = () => {
     },
   });
 };
+
+// --- Products ---------------------------------------------------------------
+
+export type ProductStatus = 'ACTIVE' | 'OUT_OF_STOCK' | 'HIDDEN' | 'ARCHIVED';
+
+export interface AdminProductFilters {
+  page?: number;
+  limit?: number;
+  status?: ProductStatus;
+  search?: string;
+  category?: string;
+}
+
+export const getAdminProducts = async (params: AdminProductFilters) => {
+  const response = await apiClient.get('/admin/products', { params });
+  return (response as any).data;
+};
+
+export const useAdminProducts = (params: AdminProductFilters) => {
+  return useQuery({
+    queryKey: ['adminProducts', params],
+    queryFn: () => getAdminProducts(params),
+    placeholderData: (prev) => prev,
+  });
+};
+
+export const updateProductStatus = async ({ id, status }: { id: string; status: ProductStatus }) => {
+  const response = await apiClient.patch(`/admin/products/${id}/status`, { status });
+  return (response as any).data;
+};
+
+export const useUpdateProductStatus = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateProductStatus,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['adminProducts'] });
+    },
+  });
+};
+
+export const deleteProduct = async (id: string) => {
+  const response = await apiClient.delete(`/admin/products/${id}`);
+  return (response as any).data;
+};
+
+export const useDeleteProduct = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteProduct,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['adminProducts'] });
+    },
+  });
+};
+
+export const getAdminProductById = async (id: string) => {
+  const response = await apiClient.get(`/admin/products/${id}`);
+  return (response as any).data;
+};
+
+export const useAdminProduct = (id: string) => {
+  return useQuery({
+    queryKey: ['adminProduct', id],
+    queryFn: () => getAdminProductById(id),
+    enabled: !!id,
+  });
+};

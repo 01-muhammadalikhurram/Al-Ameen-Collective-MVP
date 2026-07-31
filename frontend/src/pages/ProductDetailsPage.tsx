@@ -66,6 +66,25 @@ export function ProductDetailsPage() {
     toast.success(`${quantity} ${quantity > 1 ? 'items' : 'item'} added to cart!`);
   };
 
+  const handleOrderNow = () => {
+    if (!selectedItem) return;
+    
+    addItem({
+      id: selectedItem.id,
+      product_id: product.id,
+      name: product.name,
+      slug: product.slug,
+      color: selectedItem.color,
+      product_code: selectedItem.product_code,
+      selling_price: selectedItem.selling_price,
+      image_url: imageUrl,
+      quantity: quantity
+    });
+    
+    // Use navigate to go to checkout
+    window.location.href = '/checkout';
+  };
+
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumbs */}
@@ -158,7 +177,10 @@ export function ProductDetailsPage() {
               <ShoppingCart className="h-5 w-5" />
               Add to Cart
             </button>
-            <button className="flex-1 flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-[12px] font-semibold hover:bg-primary/90 transition-all hover:scale-[1.02] shadow-sm cursor-pointer">
+            <button 
+              onClick={handleOrderNow}
+              className="flex-1 flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-[12px] font-semibold hover:bg-primary/90 transition-all hover:scale-[1.02] shadow-sm cursor-pointer"
+            >
               Order Now
             </button>
           </div>

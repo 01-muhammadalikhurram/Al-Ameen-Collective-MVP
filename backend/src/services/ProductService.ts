@@ -114,4 +114,19 @@ export class ProductService {
     const newProduct = await this.productRepo.createProduct(productData, payload.items);
     return newProduct;
   }
+
+  async updateProduct(id: string, payload: any) {
+    const productData = {
+      name: payload.name,
+      description: payload.description,
+      summary_desc: payload.summary_desc,
+      fabric: payload.fabric,
+      category: payload.category,
+      season: payload.season,
+    };
+
+    // Note: slug is not updated to avoid breaking existing URLs/links.
+    
+    return this.productRepo.updateProduct(id, productData, payload.items);
+  }
 }

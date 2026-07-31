@@ -77,9 +77,10 @@ export function CheckoutPage() {
       const result = await createOrderMutation.mutateAsync(orderPayload);
       clearCart();
       navigate(`/order-success/${result.public_order_id}`);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to create order', error);
-      alert('Failed to place order. Please try again.');
+      const errorMsg = error?.message || 'Failed to place order. Please try again.';
+      alert(errorMsg);
     }
   };
 

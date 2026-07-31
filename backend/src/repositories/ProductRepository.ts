@@ -123,4 +123,70 @@ export class ProductRepository {
       return product;
     });
   }
+
+  async updateProduct(id: string, productData: Prisma.ProductUpdateInput, itemsData: any[]) {
+    return this.db.$transaction(async (tx) => {
+      // 1. Update main product
+      const product = await tx.product.update({
+        where: { id },
+        data: productData,
+      });
+
+      // 2. Get existing items
+      const existingItems = await tx.productItem.findMany({ where: { product_id: id } });
+      const incomingItemCodes = itemsData.map(i => i.product_code);
+
+      // 3. Delete removed items
+      const itemsToDelete = existingItems.filter(i => !incomingItemCodes.includes(i.product_code));
+      for (const item of itemsToDelete) {
+        // Can't delete if it's in an order, so archive instead if needed
+        try {
+          await tx.productItem.delete({ where: { id: item.id } });
+        } catch {
+          await tx.productItem.update({ where: { id: item.id }, data: { status: 'ARCHIVED' } });
+        }
+      }
+
+      // 4. Update or create items
+      for (const item of itemsData) {
+        let mediaId = undefined;
+
+        if (item.mediaUrl) {
+          const media = await tx.media.create({
+            data: {
+              url: item.mediaUrl,
+              file_name: item.mediaFileName || 'uploaded_image',
+            },
+          });
+          mediaId = media.id;
+        }
+
+        const existing = existingItems.find(i => i.product_code === item.product_code);
+        if (existing) {
+          await tx.productItem.update({
+            where: { id: existing.id },
+            data: {
+              color: item.color,
+              wholesale_price: item.wholesale_price,
+              additional_profit: item.additional_profit,
+              ...(mediaId ? { media_id: mediaId } : {}),
+            },
+          });
+        } else {
+          await tx.productItem.create({
+            data: {
+              product_id: id,
+              product_code: item.product_code,
+              color: item.color,
+              wholesale_price: item.wholesale_price,
+              additional_profit: item.additional_profit,
+              media_id: mediaId,
+            },
+          });
+        }
+      }
+
+      return product;
+    });
+  }
 }

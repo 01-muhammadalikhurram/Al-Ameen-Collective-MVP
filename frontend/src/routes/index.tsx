@@ -13,6 +13,7 @@ import { AdminOrdersPage } from '../pages/admin/AdminOrdersPage';
 import { AdminSettingsPage } from '../pages/admin/AdminSettingsPage';
 import { AdminProductsPage } from '../pages/admin/AdminProductsPage';
 import { AdminProductCreatePage } from '../pages/admin/AdminProductCreatePage';
+import { AdminProductEditPage } from '../pages/admin/AdminProductEditPage';
 import { VendorOrderPage } from '../pages/vendor/VendorOrderPage';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 
@@ -94,6 +95,10 @@ export const router = createBrowserRouter([
           {
             path: 'products/new',
             element: <AdminProductCreatePage />,
+          },
+          {
+            path: 'products/:id/edit',
+            element: <AdminProductEditPage />,
           },
           {
             path: 'settings',

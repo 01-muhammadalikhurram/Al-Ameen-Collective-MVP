@@ -1,11 +1,19 @@
 import { prisma } from '../config/prisma';
-import { OrderStatus, Prisma } from '@prisma/client';
+import { OrderStatus, ProductStatus, Prisma } from '@prisma/client';
 
 export interface OrderFilters {
   page: number;
   limit: number;
   status?: OrderStatus;
   search?: string;
+}
+
+export interface AdminProductFilters {
+  page?: number;
+  limit?: number;
+  search?: string;
+  category?: string;
+  status?: ProductStatus;
 }
 
 export class AdminService {
@@ -201,5 +209,84 @@ export class AdminService {
     });
 
     return updatedOrder;
+  }
+
+  // --- Admin Product Management ---
+
+  async getProducts(filters: AdminProductFilters) {
+    const page = filters.page || 1;
+    const limit = filters.limit || 12;
+    const skip = (page - 1) * limit;
+
+    const where: Prisma.ProductWhereInput = {};
+
+    if (filters.status) {
+      where.status = filters.status;
+    }
+
+    if (filters.category) {
+      where.category = filters.category;
+    }
+
+    if (filters.search) {
+      where.OR = [
+        { name: { contains: filters.search, mode: 'insensitive' } },
+        { description: { contains: filters.search, mode: 'insensitive' } },
+        { slug: { contains: filters.search, mode: 'insensitive' } },
+      ];
+    }
+
+    const [products, total] = await Promise.all([
+      this.db.product.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { created_at: 'desc' },
+        include: {
+          items: {
+            include: { media: true },
+          },
+        },
+      }),
+      this.db.product.count({ where }),
+    ]);
+
+    return {
+      products,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+
+  async getProductById(id: string) {
+    return this.db.product.findUnique({
+      where: { id },
+      include: {
+        items: {
+          include: { media: true }
+        }
+      }
+    });
+  }
+
+  async updateProductStatus(id: string, status: ProductStatus) {
+    return this.db.product.update({
+      where: { id },
+      data: { status },
+    });
+  }
+
+  async deleteProduct(id: string) {
+    // Delete product and its items. Because of Cascade, deleting product deletes ProductItem and OrderItem if cascade is set, wait!
+    // orderItem is Restrict on ProductItem, so we cannot hard delete if it's in an order.
+    // Therefore, we use soft-delete by setting status to ARCHIVED.
+    return this.db.product.update({
+      where: { id },
+      data: { status: 'ARCHIVED' },
+    });
   }
 }

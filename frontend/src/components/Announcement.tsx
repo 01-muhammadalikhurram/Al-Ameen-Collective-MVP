@@ -15,7 +15,7 @@ export function Announcement() {
       initial={{ height: 0, opacity: 0 }}
       animate={{ height: 'auto', opacity: 1 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="bg-accent text-accent-foreground px-4 py-2 text-center text-sm font-medium tracking-wide shadow-sm"
+      className="bg-black text-white h-[44px] flex items-center justify-center px-4 text-center text-sm font-medium tracking-wide shadow-sm"
     >
       <p>{announcementText}</p>
     </motion.div>

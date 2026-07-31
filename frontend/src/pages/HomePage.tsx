@@ -8,30 +8,27 @@ export function HomePage() {
   return (
     <div className="flex flex-col w-full">
       {/* Hero Section */}
-      <section className="relative h-[80vh] min-h-[600px] w-full flex items-center justify-center overflow-hidden">
+      <section className="relative h-[80vh] min-h-[600px] w-full flex items-center overflow-hidden">
         {/* Placeholder Hero Background */}
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center" />
-        <div className="absolute inset-0 bg-black/40" /> {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-white/70" /> {/* Light overlay */}
         
-        <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto space-y-6">
-          <h1 className="text-5xl md:text-7xl font-heading font-bold tracking-tight">
-            Premium Luxury, <br/> Delivered to You.
+        <div className="relative z-10 text-left px-4 sm:px-6 lg:px-16 max-w-5xl space-y-6">
+          <div className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-semibold tracking-wide border border-primary/20">
+            ✨ Premium Collection
+          </div>
+          <h1 className="text-5xl md:text-[60px] leading-tight font-heading font-bold tracking-tight text-primary">
+            Elegance Woven<br/>Into Every Thread.
           </h1>
-          <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
-            Discover our curated collection of high-end fabrics, stunning designs, and timeless elegance.
+          <p className="text-lg md:text-xl text-primary/80 max-w-2xl font-sans">
+            Discover our curated collection of high-end fabrics, stunning designs, and timeless elegance for the modern individual.
           </p>
-          <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="pt-4">
             <Link 
               to="/products" 
-              className="px-8 py-4 bg-white text-black font-semibold rounded-md hover:bg-white/90 transition-colors"
+              className="inline-block px-10 py-4 bg-primary text-primary-foreground font-semibold rounded-[12px] hover:bg-primary/90 transition-all hover:scale-[1.02] cursor-pointer shadow-lg shadow-primary/20"
             >
-              Shop New Arrivals
-            </Link>
-            <Link 
-              to="/products?category=unstitched" 
-              className="px-8 py-4 bg-black/30 backdrop-blur-md border border-white/30 text-white font-semibold rounded-md hover:bg-black/50 transition-colors"
-            >
-              View Unstitched
+              Shop Catalog
             </Link>
           </div>
         </div>
@@ -50,14 +47,14 @@ export function HomePage() {
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="aspect-[3/4] rounded-xl bg-muted animate-pulse" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="aspect-[4/5] rounded-[16px] bg-muted animate-pulse" />
             ))}
           </div>
         ) : data?.products && data.products.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {data.products.map((product) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {data.products.slice(0, 3).map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
@@ -73,35 +70,6 @@ export function HomePage() {
           </Link>
         </div>
       </section>
-
-      {/* Categories Banners */}
-      <section className="py-12 bg-muted/30">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Link to="/products?category=stitched" className="group relative aspect-[16/9] overflow-hidden rounded-2xl">
-              <img 
-                src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=2070&auto=format&fit=crop" 
-                alt="Stitched" 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-black/30 transition-opacity group-hover:bg-black/40" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-3xl font-heading font-bold text-white tracking-widest uppercase">Stitched</h3>
-              </div>
-            </Link>
-            <Link to="/products?category=unstitched" className="group relative aspect-[16/9] overflow-hidden rounded-2xl">
-              <img 
-                src="https://images.unsplash.com/photo-1593030103066-0093718efeb9?q=80&w=2080&auto=format&fit=crop" 
-                alt="Unstitched" 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-black/30 transition-opacity group-hover:bg-black/40" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-3xl font-heading font-bold text-white tracking-widest uppercase">Unstitched</h3>
-              </div>
-            </Link>
-          </div>
-        </div>
       </section>
     </div>
   );

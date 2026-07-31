@@ -34,23 +34,13 @@ export function ProductCard({ product, className }: ProductCardProps) {
   };
 
   return (
-    <div className={cn("group glass-card overflow-hidden flex flex-col h-full", className)}>
-      <Link to={`/products/${product.slug}`} className="relative aspect-[3/4] overflow-hidden block">
+    <div className={cn("group bg-card overflow-hidden flex flex-col h-full rounded-[16px] shadow-sm hover:shadow-md transition-shadow hover:-translate-y-1 duration-300 border border-border", className)}>
+      <Link to={`/products/${product.slug}`} className="relative aspect-[4/5] overflow-hidden block">
         <img
           src={imageUrl}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
-        {/* Hover overlay with Add to Cart button */}
-        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-          <button 
-            className="flex items-center gap-2 bg-background/90 text-foreground px-6 py-2.5 rounded-full font-medium shadow-lg hover:bg-primary hover:text-primary-foreground transition-all duration-300 transform translate-y-4 group-hover:translate-y-0"
-            onClick={handleQuickAdd}
-          >
-            <ShoppingCart className="h-4 w-4" />
-            Quick Add
-          </button>
-        </div>
       </Link>
       
       <div className="p-5 flex flex-col flex-1">
@@ -62,20 +52,37 @@ export function ProductCard({ product, className }: ProductCardProps) {
             {product.name}
           </h3>
         </Link>
+        <div className="text-sm text-muted-foreground mb-4">
+          {product.fabric || 'Premium Fabric'}
+        </div>
         <div className="mt-auto pt-2 flex items-center justify-between">
           <p className="font-medium text-lg">
             Rs {price}
           </p>
-          <div className="flex gap-1">
+          <div className="flex gap-1 items-center">
             {product.items.map((item) => (
               <span 
                 key={item.id} 
-                className="w-3 h-3 rounded-full border border-border"
+                className="w-4 h-4 rounded-full border border-border shadow-sm"
                 style={{ backgroundColor: item.color.toLowerCase() }}
                 title={item.color}
               />
             ))}
           </div>
+        </div>
+        <div className="mt-4 flex flex-col gap-2">
+          <button 
+            onClick={handleQuickAdd}
+            className="w-full bg-secondary text-secondary-foreground py-2.5 rounded-[12px] font-semibold hover:bg-secondary/90 transition-all cursor-pointer flex items-center justify-center gap-2 text-sm hover:scale-[1.02]"
+          >
+            <ShoppingCart className="h-4 w-4" /> Add to Cart
+          </button>
+          <Link 
+            to={`/products/${product.slug}`}
+            className="w-full text-center bg-primary text-primary-foreground py-2.5 rounded-[12px] font-semibold hover:bg-primary/90 transition-all cursor-pointer text-sm hover:scale-[1.02]"
+          >
+            Order Now
+          </Link>
         </div>
       </div>
     </div>

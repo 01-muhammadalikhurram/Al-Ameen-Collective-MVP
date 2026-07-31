@@ -45,6 +45,8 @@ export function ProductDetailsPage() {
   const selectedItem = product.items.find(i => i.id === selectedItemId) || product.items[0];
   const imageUrl = selectedItem?.media?.url || 'https://via.placeholder.com/800x1000?text=No+Image';
 
+  const [quantity, setQuantity] = useState(1);
+
   const handleAddToCart = () => {
     if (!selectedItem) return;
     
@@ -56,7 +58,8 @@ export function ProductDetailsPage() {
       color: selectedItem.color,
       product_code: selectedItem.product_code,
       selling_price: selectedItem.selling_price,
-      image_url: imageUrl
+      image_url: imageUrl,
+      quantity: quantity
     });
   };
 
@@ -75,14 +78,14 @@ export function ProductDetailsPage() {
 
       <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
         
-        {/* Image Gallery (Simplified for MVP) */}
+        {/* Image Gallery */}
         <div className="lg:w-1/2 flex-shrink-0">
-          <div className="aspect-[3/4] bg-muted rounded-2xl overflow-hidden border border-border">
+          <div className="aspect-[4/5] bg-muted rounded-[16px] overflow-hidden border border-border group cursor-zoom-in shadow-md">
             <img 
               src={imageUrl} 
               alt={product.name} 
-              className="w-full h-full object-cover transition-opacity duration-300"
-              key={imageUrl} // Forces re-render/animation on image change
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.15]"
+              key={imageUrl}
             />
           </div>
           {/* Thumbnails could go here in a future iteration */}
@@ -127,17 +130,33 @@ export function ProductDetailsPage() {
             </div>
           )}
 
+          {/* Quantity Selector */}
+          <div className="mb-8">
+            <h3 className="text-sm font-medium mb-3">Quantity</h3>
+            <div className="flex items-center gap-4">
+              <button 
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors"
+              >-</button>
+              <span className="font-semibold w-4 text-center">{quantity}</span>
+              <button 
+                onClick={() => setQuantity(quantity + 1)}
+                className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors"
+              >+</button>
+            </div>
+          </div>
+
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
             <button 
               onClick={handleAddToCart}
-              className="flex-1 flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-md font-semibold hover:bg-primary/90 transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 bg-secondary text-secondary-foreground px-8 py-4 rounded-[12px] font-semibold hover:bg-secondary/90 transition-all hover:scale-[1.02] shadow-sm cursor-pointer"
             >
               <ShoppingCart className="h-5 w-5" />
               Add to Cart
             </button>
-            <button className="flex-1 flex items-center justify-center gap-2 bg-secondary text-secondary-foreground px-8 py-4 rounded-md font-semibold hover:bg-secondary/80 transition-colors">
-              Buy it Now
+            <button className="flex-1 flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-[12px] font-semibold hover:bg-primary/90 transition-all hover:scale-[1.02] shadow-sm cursor-pointer">
+              Order Now
             </button>
           </div>
 
@@ -166,6 +185,14 @@ export function ProductDetailsPage() {
             </div>
           </div>
 
+        </div>
+      </div>
+
+      {/* Similar Products Section Placeholder */}
+      <div className="mt-24 mb-12 border-t border-border pt-16">
+        <h2 className="text-3xl font-heading font-bold mb-8">Similar Products</h2>
+        <div className="text-center py-12 bg-muted/30 rounded-xl border border-dashed border-border text-muted-foreground">
+          Similar products will be loaded here dynamically.
         </div>
       </div>
     </div>

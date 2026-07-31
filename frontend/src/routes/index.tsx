@@ -6,6 +6,10 @@ import { ProductDetailsPage } from '../pages/ProductDetailsPage';
 import { CartPage } from '../pages/CartPage';
 import { CheckoutPage } from '../pages/CheckoutPage';
 import { OrderSuccessPage } from '../pages/OrderSuccessPage';
+import { AboutPage } from '../pages/AboutPage';
+import { FAQPage } from '../pages/FAQPage';
+import { PrivacyPage } from '../pages/PrivacyPage';
+import { TermsPage } from '../pages/TermsPage';
 import { AdminLayout } from '../layouts/AdminLayout';
 import { AdminLoginPage } from '../pages/admin/AdminLoginPage';
 import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
@@ -49,6 +53,22 @@ export const router = createBrowserRouter([
       {
         path: 'order-success/:publicId',
         element: <OrderSuccessPage />,
+      },
+      {
+        path: 'about',
+        element: <AboutPage />,
+      },
+      {
+        path: 'faqs',
+        element: <FAQPage />,
+      },
+      {
+        path: 'privacy',
+        element: <PrivacyPage />,
+      },
+      {
+        path: 'terms',
+        element: <TermsPage />,
       },
     ],
   },

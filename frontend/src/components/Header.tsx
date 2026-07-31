@@ -1,11 +1,17 @@
 import { Link } from 'react-router-dom';
 import { ShoppingCart, Menu, Search } from 'lucide-react';
 import { useCartStore } from '../store/cartStore';
+import { useConfig } from '../api/config';
 
 export function Header() {
   // Calculate total items in cart
   const cartItems = useCartStore((state) => state.items);
   const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+
+  const { data: config } = useConfig();
+  const whatsappUrl = config?.settings?.whatsapp_number 
+    ? `https://wa.me/${config.settings.whatsapp_number.replace(/\D/g, '')}`
+    : '#';
 
   return (
     <header className="sticky top-0 z-50 w-full bg-secondary border-b border-border shadow-sm">
@@ -33,7 +39,7 @@ export function Header() {
             <Link to="/products" className="hover:text-secondary-foreground transition-colors cursor-pointer">Catalog</Link>
             <Link to="/about" className="hover:text-secondary-foreground transition-colors cursor-pointer">About</Link>
             <Link to="/faqs" className="hover:text-secondary-foreground transition-colors cursor-pointer">FAQs</Link>
-            <Link to="/contact" className="hover:text-secondary-foreground transition-colors cursor-pointer">Contact</Link>
+            <a href={whatsappUrl} target="_blank" rel="noreferrer" className="hover:text-secondary-foreground transition-colors cursor-pointer">Contact</a>
           </nav>
 
           {/* Action Icons */}

@@ -1,7 +1,13 @@
 import { Link } from 'react-router-dom';
 import { Mail } from 'lucide-react';
+import { useConfig } from '../api/config';
 
 export function Footer() {
+  const { data: config } = useConfig();
+  const whatsappUrl = config?.settings?.whatsapp_number 
+    ? `https://wa.me/${config.settings.whatsapp_number.replace(/\D/g, '')}`
+    : '#';
+
   return (
     <footer className="border-t border-border bg-card">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -33,9 +39,9 @@ export function Footer() {
             <h3 className="font-semibold text-foreground mb-4">Shop</h3>
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li><Link to="/products" className="hover:text-accent transition-colors">All Products</Link></li>
-              <li><Link to="/categories/new" className="hover:text-accent transition-colors">New Arrivals</Link></li>
-              <li><Link to="/categories/best-sellers" className="hover:text-accent transition-colors">Best Sellers</Link></li>
-              <li><Link to="/categories/sale" className="hover:text-accent transition-colors">Sale</Link></li>
+              <li><Link to="/products?category=new" className="hover:text-accent transition-colors">New Arrivals</Link></li>
+              <li><Link to="/products?category=best-sellers" className="hover:text-accent transition-colors">Best Sellers</Link></li>
+              <li><Link to="/products?category=sale" className="hover:text-accent transition-colors">Sale</Link></li>
             </ul>
           </div>
 
@@ -44,7 +50,7 @@ export function Footer() {
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li><Link to="/faqs" className="hover:text-accent transition-colors">FAQs</Link></li>
               <li><Link to="/about" className="hover:text-accent transition-colors">About</Link></li>
-              <li><Link to="/contact" className="hover:text-accent transition-colors">Contact Us</Link></li>
+              <li><a href={whatsappUrl} target="_blank" rel="noreferrer" className="hover:text-accent transition-colors">Contact Us</a></li>
             </ul>
           </div>
 

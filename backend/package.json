@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Al Ameen Collective — Backend API Server",
   "main": "dist/server.js",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "prisma generate && tsc",

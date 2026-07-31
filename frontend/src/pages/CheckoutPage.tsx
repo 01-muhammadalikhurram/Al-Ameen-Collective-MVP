@@ -117,7 +117,7 @@ export function CheckoutPage() {
                   <input 
                     {...register('firstName')} 
                     id="firstName" 
-                    className="w-full px-4 py-2 rounded-md border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                    className="w-full px-4 py-2 rounded-[12px] border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                     placeholder="Muhammad"
                   />
                   {errors.firstName && <p className="text-sm text-destructive">{errors.firstName.message}</p>}
@@ -128,7 +128,7 @@ export function CheckoutPage() {
                   <input 
                     {...register('lastName')} 
                     id="lastName" 
-                    className="w-full px-4 py-2 rounded-md border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                    className="w-full px-4 py-2 rounded-[12px] border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                     placeholder="Ali"
                   />
                   {errors.lastName && <p className="text-sm text-destructive">{errors.lastName.message}</p>}
@@ -142,7 +142,7 @@ export function CheckoutPage() {
                     {...register('phone')} 
                     id="phone" 
                     type="tel"
-                    className="w-full px-4 py-2 rounded-md border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                    className="w-full px-4 py-2 rounded-[12px] border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                     placeholder="03001234567"
                   />
                   {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
@@ -154,7 +154,7 @@ export function CheckoutPage() {
                     {...register('email')} 
                     id="email" 
                     type="email"
-                    className="w-full px-4 py-2 rounded-md border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                    className="w-full px-4 py-2 rounded-[12px] border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                     placeholder="ali@example.com"
                   />
                   {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
@@ -171,7 +171,7 @@ export function CheckoutPage() {
                 <input 
                   {...register('address')} 
                   id="address" 
-                  className="w-full px-4 py-2 rounded-md border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                  className="w-full px-4 py-2 rounded-[12px] border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                   placeholder="House No, Street Name, Area"
                 />
                 {errors.address && <p className="text-sm text-destructive">{errors.address.message}</p>}
@@ -183,7 +183,7 @@ export function CheckoutPage() {
                   <input 
                     {...register('city')} 
                     id="city" 
-                    className="w-full px-4 py-2 rounded-md border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                    className="w-full px-4 py-2 rounded-[12px] border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                     placeholder="Lahore"
                   />
                   {errors.city && <p className="text-sm text-destructive">{errors.city.message}</p>}
@@ -194,7 +194,7 @@ export function CheckoutPage() {
                   <input 
                     {...register('province')} 
                     id="province" 
-                    className="w-full px-4 py-2 rounded-md border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                    className="w-full px-4 py-2 rounded-[12px] border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                     placeholder="Punjab"
                   />
                   {errors.province && <p className="text-sm text-destructive">{errors.province.message}</p>}
@@ -205,7 +205,7 @@ export function CheckoutPage() {
                   <input 
                     {...register('postalCode')} 
                     id="postalCode" 
-                    className="w-full px-4 py-2 rounded-md border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                    className="w-full px-4 py-2 rounded-[12px] border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                     placeholder="54000"
                   />
                   {errors.postalCode && <p className="text-sm text-destructive">{errors.postalCode.message}</p>}
@@ -218,7 +218,7 @@ export function CheckoutPage() {
               <button 
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-4 bg-primary text-primary-foreground font-semibold rounded-md hover:bg-primary/90 transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-lg"
+                className="w-full py-4 bg-primary text-primary-foreground font-semibold rounded-[12px] hover:bg-primary/90 transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-lg"
               >
                 {isSubmitting ? 'Processing...' : 'Place Order Now'}
               </button>
@@ -235,7 +235,7 @@ export function CheckoutPage() {
             <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
               {items.map((item) => (
                 <div key={item.id} className="flex gap-4">
-                  <div className="relative w-16 h-16 rounded-md overflow-hidden bg-muted border border-border flex-shrink-0">
+                  <div className="relative w-16 h-16 rounded-[12px] overflow-hidden bg-muted border border-border flex-shrink-0">
                     <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
                     <span className="absolute -top-2 -right-2 w-5 h-5 bg-foreground text-background text-xs font-bold rounded-full flex items-center justify-center">
                       {item.quantity}
@@ -277,7 +277,7 @@ export function CheckoutPage() {
             <button 
               onClick={handleSubmit(onSubmit)}
               disabled={isSubmitting}
-              className="hidden lg:flex w-full py-4 items-center justify-center bg-primary text-primary-foreground font-semibold rounded-md hover:bg-primary/90 transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-lg"
+              className="hidden lg:flex w-full py-4 items-center justify-center bg-primary text-primary-foreground font-semibold rounded-[12px] hover:bg-primary/90 transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-lg"
             >
               {isSubmitting ? (
                 <div className="flex items-center gap-2">

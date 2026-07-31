@@ -24,7 +24,7 @@ export function OrderSuccessPage() {
       <div className="flex flex-col sm:flex-row gap-4">
         <Link 
           to="/products" 
-          className="inline-flex items-center justify-center px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-md hover:bg-primary/90 transition-colors shadow-lg"
+          className="inline-flex items-center justify-center px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-[12px] hover:bg-primary/90 transition-colors shadow-lg"
         >
           Continue Shopping
           <ArrowRight className="ml-2 h-4 w-4" />

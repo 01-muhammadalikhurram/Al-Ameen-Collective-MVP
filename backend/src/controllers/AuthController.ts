@@ -28,5 +28,19 @@ export class AuthController {
       next(error);
     }
   };
+
+  updateProfile = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const authReq = req as AuthRequest;
+      if (!authReq.user) {
+        throw new Error('User not found in request');
+      }
+      const payload = req.body as { username: string; currentPassword?: string; newPassword?: string };
+      const data = await this.authService.updateProfile(authReq.user.userId, payload);
+      res.status(200).json(ApiResponse.success('Profile updated successfully', data));
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 

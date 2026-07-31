@@ -1,5 +1,3 @@
-import React from 'react';
-
 export function AboutPage() {
   return (
     <div className="container mx-auto px-4 py-24 text-center min-h-[60vh] flex flex-col justify-center">

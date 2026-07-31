@@ -11,4 +11,12 @@ export class AdminRepository {
   async create(data: Prisma.AdminCreateInput): Promise<Admin> {
     return this.db.admin.create({ data });
   }
+
+  async findById(id: string): Promise<Admin | null> {
+    return this.db.admin.findUnique({ where: { id } });
+  }
+
+  async update(id: string, data: Prisma.AdminUpdateInput): Promise<Admin> {
+    return this.db.admin.update({ where: { id }, data });
+  }
 }

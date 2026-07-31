@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
+import bcrypt from 'bcrypt';
 
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -14,7 +15,7 @@ async function main() {
   console.log('🌱 Starting database seed...');
 
   // 1. Create Default Admin User
-  const adminPasswordHash = 'admin123'; // Storing plain text as requested for debugging
+  const adminPasswordHash = await bcrypt.hash('admin123', 10);
   const admin = await prisma.admin.upsert({
     where: { username: 'admin' },
     update: {

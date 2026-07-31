@@ -52,5 +52,6 @@ router.post('/login', validate(loginSchema), authController.login);
  *       - bearerAuth: []
  */
 router.get('/me', authMiddleware as unknown as RequestHandler, authController.getMe as unknown as RequestHandler);
+router.patch('/profile', authMiddleware as unknown as RequestHandler, authController.updateProfile as unknown as RequestHandler);
 
 export { router as authRouter };

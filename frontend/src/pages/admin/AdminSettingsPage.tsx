@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Globe, DollarSign, Truck, Megaphone, Plus, Trash2, Save } from 'lucide-react';
+import { Globe, DollarSign, Truck, Megaphone, Plus, Trash2, Save, Shield } from 'lucide-react';
 import { 
   useAdminSettings, 
   useUpdateWebsiteSettings, 
@@ -10,10 +10,11 @@ import {
   useUpdateAnnouncement,
   useDeleteAnnouncement
 } from '../../api/settings';
+import { useUpdateProfile } from '../../api/auth';
 import { toast } from 'react-hot-toast';
 
 export function AdminSettingsPage() {
-  const [activeTab, setActiveTab] = useState<'website' | 'pricing' | 'delivery' | 'announcements'>('website');
+  const [activeTab, setActiveTab] = useState<'website' | 'pricing' | 'delivery' | 'announcements' | 'security'>('website');
   
   const { data, isLoading } = useAdminSettings();
 
@@ -64,6 +65,12 @@ export function AdminSettingsPage() {
           icon={<Megaphone className="h-4 w-4 mr-2" />} 
           label="Announcements" 
         />
+        <TabButton 
+          active={activeTab === 'security'} 
+          onClick={() => setActiveTab('security')} 
+          icon={<Shield className="h-4 w-4 mr-2" />} 
+          label="Security" 
+        />
       </div>
 
       {/* Content Area */}
@@ -72,6 +79,7 @@ export function AdminSettingsPage() {
         {activeTab === 'pricing' && <PricingSettingsTab rule={data.pricingRule} />}
         {activeTab === 'delivery' && <DeliveryRulesTab rules={data.deliveryRules} />}
         {activeTab === 'announcements' && <AnnouncementsTab announcements={data.announcements} />}
+        {activeTab === 'security' && <SecurityTab />}
       </div>
     </div>
   );
@@ -418,5 +426,88 @@ function AnnouncementsTab({ announcements }: { announcements: any[] }) {
         )}
       </div>
     </div>
+  );
+}
+
+function SecurityTab() {
+  const updateMutation = useUpdateProfile();
+  const [formData, setFormData] = useState({
+    username: '',
+    currentPassword: '',
+    newPassword: ''
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.username && !formData.newPassword) {
+      toast.error('Please enter a new username or new password');
+      return;
+    }
+    
+    updateMutation.mutate(formData, {
+      onSuccess: () => {
+        toast.success('Admin credentials updated successfully');
+        setFormData({ username: '', currentPassword: '', newPassword: '' });
+      },
+      onError: (err: any) => {
+        toast.error(err?.response?.data?.message || 'Failed to update credentials');
+      }
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="p-6 space-y-6 max-w-xl">
+      <div>
+        <h3 className="text-lg font-medium text-foreground mb-1">Admin Credentials</h3>
+        <p className="text-sm text-muted-foreground">
+          Update your login username and password. You must provide your current password to change your password.
+        </p>
+      </div>
+      
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <label className="text-sm font-medium">New Username (Optional)</label>
+          <input
+            type="text"
+            className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            value={formData.username}
+            onChange={(e) => setFormData({...formData, username: e.target.value})}
+            placeholder="Leave blank to keep current"
+          />
+        </div>
+
+        <div className="space-y-2 pt-4 border-t border-border">
+          <label className="text-sm font-medium text-destructive">Current Password (Required if changing password)</label>
+          <input
+            type="password"
+            className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            value={formData.currentPassword}
+            onChange={(e) => setFormData({...formData, currentPassword: e.target.value})}
+            placeholder="••••••••"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium">New Password (Optional)</label>
+          <input
+            type="password"
+            className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            value={formData.newPassword}
+            onChange={(e) => setFormData({...formData, newPassword: e.target.value})}
+            placeholder="Leave blank to keep current"
+          />
+        </div>
+      </div>
+      
+      <div className="pt-4 border-t border-border flex justify-end">
+        <button
+          type="submit"
+          disabled={updateMutation.isPending}
+          className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+        >
+          {updateMutation.isPending ? 'Updating...' : <><Shield className="mr-2 h-4 w-4" /> Update Credentials</>}
+        </button>
+      </div>
+    </form>
   );
 }

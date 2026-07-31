@@ -116,7 +116,8 @@ export class AdminService {
           },
           history: {
             orderBy: { created_at: 'desc' }
-          }
+          },
+          vendorTokens: true
         }
       }),
       this.db.order.count({ where }),

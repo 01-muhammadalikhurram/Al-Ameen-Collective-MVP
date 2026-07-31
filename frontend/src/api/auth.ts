@@ -12,6 +12,11 @@ export const getMe = async () => {
   return (response as any).data;
 };
 
+export const updateProfile = async (payload: { username: string; currentPassword?: string; newPassword?: string }) => {
+  const response = await apiClient.patch('/auth/profile', payload);
+  return (response as any).data;
+};
+
 export const useLogin = () => {
   const setToken = useAuthStore((state) => state.setToken);
   
@@ -40,5 +45,11 @@ export const useAdminUser = () => {
     },
     enabled: isAuthenticated,
     retry: false,
+  });
+};
+
+export const useUpdateProfile = () => {
+  return useMutation({
+    mutationFn: updateProfile,
   });
 };

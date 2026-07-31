@@ -1,13 +1,12 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuthStore } from '../store/authStore';
+import { Outlet } from 'react-router-dom';
 
 export function ProtectedRoute() {
-  const { isAuthenticated } = useAuthStore();
-  const location = useLocation();
+  // Bypass login for now
 
-  if (!isAuthenticated) {
-    return <Navigate to="/admin/login" state={{ from: location }} replace />;
-  }
+  // Bypass login for now
+  // if (!isAuthenticated) {
+  //   return <Navigate to="/admin/login" state={{ from: location }} replace />;
+  // }
 
   return <Outlet />;
 }

@@ -33,8 +33,26 @@ export function ProductCard({ product, className }: ProductCardProps) {
       image_url: imageUrl,
       quantity: 1
     });
-    
     toast.success('Added to cart!');
+  };
+
+  const handleOrderNow = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!displayItem) return;
+    
+    addItem({
+      id: displayItem.id,
+      product_id: product.id,
+      name: product.name,
+      slug: product.slug,
+      color: displayItem.color,
+      product_code: displayItem.product_code,
+      selling_price: displayItem.selling_price,
+      image_url: imageUrl,
+      quantity: 1
+    });
+    
+    window.location.href = '/checkout';
   };
 
   return (
@@ -81,12 +99,12 @@ export function ProductCard({ product, className }: ProductCardProps) {
           >
             <ShoppingCart className="h-4 w-4" /> Add to Cart
           </button>
-          <Link 
-            to={`/products/${product.slug}`}
+          <button 
+            onClick={handleOrderNow}
             className="w-full text-center bg-primary text-primary-foreground py-2.5 rounded-[12px] font-semibold hover:bg-primary/90 transition-all cursor-pointer text-sm hover:scale-[1.02]"
           >
             Order Now
-          </Link>
+          </button>
         </div>
       </div>
     </div>

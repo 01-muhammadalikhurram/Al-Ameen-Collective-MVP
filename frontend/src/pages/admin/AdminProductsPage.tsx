@@ -33,7 +33,7 @@ export function AdminProductsPage() {
         </div>
         <Link 
           to="/admin/products/new" 
-          className="bg-red-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-red-700 transition-colors shadow-lg hover:shadow-red-600/20"
+          className="bg-primary text-primary-foreground px-6 py-3 rounded-xl font-medium hover:bg-primary/90 transition-colors shadow-lg hover:shadow-primary/20"
         >
           Add New Product
         </Link>

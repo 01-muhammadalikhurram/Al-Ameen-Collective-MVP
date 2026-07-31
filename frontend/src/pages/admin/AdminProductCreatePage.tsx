@@ -110,31 +110,31 @@ export function AdminProductCreatePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-muted-foreground mb-2">Product Name</label>
-              <input required value={name} onChange={e => setName(e.target.value)} type="text" className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-accent" placeholder="e.g. Classic Cotton Kameez" />
+              <input required value={name} onChange={e => setName(e.target.value)} type="text" className="w-full bg-background border border-2 border-primary/20 rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-primary" placeholder="e.g. Classic Cotton Kameez" />
             </div>
             <div>
               <label className="block text-sm font-medium text-muted-foreground mb-2">Summary Description (For Cards)</label>
-              <input value={summaryDesc} onChange={e => setSummaryDesc(e.target.value)} type="text" className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-accent" placeholder="Short and catchy..." />
+              <input value={summaryDesc} onChange={e => setSummaryDesc(e.target.value)} type="text" className="w-full bg-background border border-2 border-primary/20 rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-primary" placeholder="Short and catchy..." />
             </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-muted-foreground mb-2">Full Description</label>
-            <textarea value={description} onChange={e => setDescription(e.target.value)} rows={4} className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-accent" placeholder="Detailed product description..."></textarea>
+            <textarea value={description} onChange={e => setDescription(e.target.value)} rows={4} className="w-full bg-background border border-2 border-primary/20 rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-primary" placeholder="Detailed product description..."></textarea>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-muted-foreground mb-2">Fabric</label>
-              <input required value={fabric} onChange={e => setFabric(e.target.value)} type="text" className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-accent" placeholder="e.g. 100% Egyptian Cotton" />
+              <input required value={fabric} onChange={e => setFabric(e.target.value)} type="text" className="w-full bg-background border border-2 border-primary/20 rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-primary" placeholder="e.g. 100% Egyptian Cotton" />
             </div>
             <div>
               <label className="block text-sm font-medium text-muted-foreground mb-2">Category</label>
-              <input required value={category} onChange={e => setCategory(e.target.value)} type="text" className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-accent" placeholder="e.g. Unstitched" />
+              <input required value={category} onChange={e => setCategory(e.target.value)} type="text" className="w-full bg-background border border-2 border-primary/20 rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-primary" placeholder="e.g. Unstitched" />
             </div>
             <div>
               <label className="block text-sm font-medium text-muted-foreground mb-2">Season</label>
-              <input required value={season} onChange={e => setSeason(e.target.value)} type="text" className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-accent" placeholder="e.g. Summer 2026" />
+              <input required value={season} onChange={e => setSeason(e.target.value)} type="text" className="w-full bg-background border border-2 border-primary/20 rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-primary" placeholder="e.g. Summer 2026" />
             </div>
           </div>
         </div>
@@ -162,19 +162,19 @@ export function AdminProductCreatePage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                   <div>
                     <label className="block text-xs font-medium text-muted-foreground mb-2">Color</label>
-                    <input required value={item.color} onChange={e => updateItem(index, 'color', e.target.value)} type="text" className="w-full bg-card border border-border rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:border-accent" placeholder="e.g. Midnight Blue" />
+                    <input required value={item.color} onChange={e => updateItem(index, 'color', e.target.value)} type="text" className="w-full bg-card border border-2 border-primary/20 rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:border-primary" placeholder="e.g. Midnight Blue" />
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-muted-foreground mb-2">Product Code (SKU)</label>
-                    <input required value={item.product_code} onChange={e => updateItem(index, 'product_code', e.target.value)} type="text" className="w-full bg-card border border-border rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:border-accent" placeholder="e.g. AAC-MB-001" />
+                    <input required value={item.product_code} onChange={e => updateItem(index, 'product_code', e.target.value)} type="text" className="w-full bg-card border border-2 border-primary/20 rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:border-primary" placeholder="e.g. AAC-MB-001" />
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-muted-foreground mb-2">Wholesale Price (PKR)</label>
-                    <input required min="0" value={item.wholesale_price} onChange={e => updateItem(index, 'wholesale_price', e.target.value)} type="number" className="w-full bg-card border border-border rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:border-accent" />
+                    <input required min="0" value={item.wholesale_price} onChange={e => updateItem(index, 'wholesale_price', e.target.value)} type="number" className="w-full bg-card border border-2 border-primary/20 rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:border-primary" />
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-muted-foreground mb-2">Special Profit (0 = use Global)</label>
-                    <input min="0" value={item.additional_profit} onChange={e => updateItem(index, 'additional_profit', e.target.value)} type="number" className="w-full bg-card border border-border rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:border-accent" />
+                    <input min="0" value={item.additional_profit} onChange={e => updateItem(index, 'additional_profit', e.target.value)} type="number" className="w-full bg-card border border-2 border-primary/20 rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:border-primary" />
                   </div>
                 </div>
 
@@ -188,7 +188,7 @@ export function AdminProductCreatePage() {
         </div>
 
         <div className="flex justify-end pt-4">
-          <button type="submit" disabled={loading} className="bg-red-600 text-white px-8 py-4 rounded-xl font-medium hover:bg-red-700 transition-colors shadow-lg shadow-red-600/20 disabled:opacity-50 flex items-center gap-2">
+          <button type="submit" disabled={loading} className="bg-primary text-primary-foreground px-8 py-4 rounded-xl font-medium hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20 disabled:opacity-50 flex items-center gap-2">
             {loading ? 'Saving Product...' : 'Save Product & Publish'}
           </button>
         </div>

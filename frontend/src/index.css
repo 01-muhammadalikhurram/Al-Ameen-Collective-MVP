@@ -5,39 +5,39 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.446 0.187 294.048);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.87 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.87 0 0);
+  --background: #F8F3EC;
+  --foreground: #510F17;
+  --card: #FFFFFF;
+  --card-foreground: #510F17;
+  --popover: #FFFFFF;
+  --popover-foreground: #510F17;
+  --primary: #510F17;
+  --primary-foreground: #FFFFFF;
+  --secondary: #DBB177;
+  --secondary-foreground: #510F17;
+  --muted: #E4D8CA;
+  --muted-foreground: #5F5F5F;
+  --accent: #DBB177;
+  --accent-foreground: #510F17;
+  --destructive: #D32F2F;
+  --destructive-foreground: #FFFFFF;
+  --border: #E4D8CA;
+  --input: #E4D8CA;
+  --ring: #DBB177;
+  --chart-1: #510F17;
+  --chart-2: #DBB177;
+  --chart-3: #5F5F5F;
+  --chart-4: #E4D8CA;
+  --chart-5: #F8F3EC;
+  --radius: 0.75rem; /* 12px */
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #510F17;
+  --sidebar-primary: #510F17;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #E4D8CA;
+  --sidebar-accent-foreground: #510F17;
+  --sidebar-border: #E4D8CA;
+  --sidebar-ring: #DBB177;
 }
 
 .dark {
@@ -114,7 +114,7 @@
   --color-sidebar-ring: var(--sidebar-ring);
   
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-heading: 'Outfit', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Playfair Display', 'Outfit', system-ui, -apple-system, sans-serif;
 }
 
 @layer base {

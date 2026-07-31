@@ -21,7 +21,8 @@ export class AuthService {
       throw new ApiError(401, 'Invalid username or password');
     }
 
-    const isPasswordValid = await bcrypt.compare(password, admin.password_hash);
+    // For debugging: compare plain text passwords
+    const isPasswordValid = password === admin.password_hash;
     if (!isPasswordValid) {
       throw new ApiError(401, 'Invalid username or password');
     }

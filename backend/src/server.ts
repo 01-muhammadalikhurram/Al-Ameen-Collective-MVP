@@ -4,7 +4,7 @@ import { logger } from './config/logger';
 
 const PORT = config.PORT;
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   logger.info(`🚀 Al Ameen Collective API running on port ${PORT}`);
   logger.info(`📚 API Docs available at /api-docs`);
   logger.info(`🔗 Health check: /api/v1/health`);

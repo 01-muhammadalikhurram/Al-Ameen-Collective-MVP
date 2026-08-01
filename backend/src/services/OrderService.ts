@@ -145,13 +145,13 @@ export class OrderService {
     // Since the vendor page needs wholesale price and profit (per user feedback), 
     // we can return the entire order which contains these fields.
     // Let's explicitly format it to make sure we don't accidentally leak anything else.
-    const settings = await this.configRepo.getSettings();
-    const defaultDeliveryCharge = Number(settings.default_delivery_charge);
+    const settings = await this.configRepo.getWebsiteSettings();
+    const defaultDeliveryCharge = settings ? Number(settings.default_delivery_charge) : 0;
     const orderDeliveryCharge = Number(order.delivery_charge);
     const deliveryDiscount = Math.max(0, defaultDeliveryCharge - orderDeliveryCharge);
 
     let totalProfit = 0;
-    const items = order.items.map((item) => {
+    const items = order.items.map((item: any) => {
       totalProfit += Number(item.profit);
       return {
         id: item.id,

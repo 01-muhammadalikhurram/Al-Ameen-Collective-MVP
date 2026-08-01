@@ -145,6 +145,26 @@ export class OrderService {
     // Since the vendor page needs wholesale price and profit (per user feedback), 
     // we can return the entire order which contains these fields.
     // Let's explicitly format it to make sure we don't accidentally leak anything else.
+    const settings = await this.configRepo.getSettings();
+    const defaultDeliveryCharge = Number(settings.default_delivery_charge);
+    const orderDeliveryCharge = Number(order.delivery_charge);
+    const deliveryDiscount = Math.max(0, defaultDeliveryCharge - orderDeliveryCharge);
+
+    let totalProfit = 0;
+    const items = order.items.map((item) => {
+      totalProfit += Number(item.profit);
+      return {
+        id: item.id,
+        quantity: item.quantity,
+        wholesale_price: item.wholesale_price,
+        selling_price: item.selling_price,
+        profit: item.profit,
+        productItem: item.productItem
+      };
+    });
+
+    const netProfit = totalProfit - deliveryDiscount;
+
     return {
       public_order_id: order.public_order_id,
       customer_name: order.customer_name,
@@ -152,18 +172,15 @@ export class OrderService {
       customer_address: order.customer_address,
       notes: order.notes,
       delivery_charge: order.delivery_charge,
+      default_delivery_charge: defaultDeliveryCharge,
+      delivery_discount: deliveryDiscount,
+      total_commission: totalProfit,
+      net_profit: netProfit,
       subtotal: order.subtotal,
       total: order.total,
       status: order.status,
       created_at: order.created_at,
-      items: order.items.map((item) => ({
-        id: item.id,
-        quantity: item.quantity,
-        wholesale_price: item.wholesale_price,
-        selling_price: item.selling_price,
-        profit: item.profit,
-        productItem: item.productItem
-      }))
+      items
     };
   }
 }

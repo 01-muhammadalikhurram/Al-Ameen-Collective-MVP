@@ -27,6 +27,10 @@ export interface VendorOrder {
   customer_address: string;
   notes: string | null;
   delivery_charge: number;
+  default_delivery_charge: number;
+  delivery_discount: number;
+  total_commission: number;
+  net_profit: number;
   subtotal: number;
   wholesale_subtotal: number;
   retail_total: number;

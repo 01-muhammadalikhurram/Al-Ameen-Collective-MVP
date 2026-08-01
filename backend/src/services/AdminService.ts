@@ -124,11 +124,13 @@ export class AdminService {
     ]);
 
     return {
-      orders: orders.map(order => ({
-        ...order,
-        vendor_token: order.vendorTokens[0]?.token || null,
-        vendorTokens: undefined // remove the array from the payload to keep it clean
-      })),
+      orders: orders.map(order => {
+        const { vendorTokens, ...rest } = order;
+        return {
+          ...rest,
+          vendor_token: vendorTokens?.[0]?.token || null,
+        };
+      }),
       pagination: {
         page,
         limit,

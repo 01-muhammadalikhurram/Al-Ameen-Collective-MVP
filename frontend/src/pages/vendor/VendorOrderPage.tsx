@@ -162,6 +162,28 @@ export function VendorOrderPage() {
               <span className="flex items-center gap-2"><Truck size={14} /> Delivery Charges</span>
               <span>Rs. {order.delivery_charge}</span>
             </div>
+            
+            <div className="pt-3 border-t border-border/50">
+              <h4 className="text-sm font-semibold mb-2">Profit Breakdown</h4>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center text-muted-foreground">
+                  <span>Total Commission (Profit)</span>
+                  <span className="text-green-600">Rs. {order.total_commission}</span>
+                </div>
+                {order.delivery_discount > 0 && (
+                  <div className="flex justify-between items-center text-muted-foreground">
+                    <span>Discount on Delivery</span>
+                    <span className="text-red-500">- Rs. {order.delivery_discount}</span>
+                  </div>
+                )}
+                <div className="flex justify-between items-center font-medium">
+                  <span>Muhammad Ali's Net Profit</span>
+                  <span className={order.net_profit >= 0 ? "text-green-600 font-bold" : "text-red-600 font-bold"}>
+                    Rs. {order.net_profit}
+                  </span>
+                </div>
+              </div>
+            </div>
             <div className="pt-3 border-t border-border/50 flex justify-between items-center font-bold text-lg text-accent">
               <span>Customer Must Pay (COD)</span>
               <span>Rs. {order.retail_total}</span>
